@@ -1,7 +1,7 @@
-title: Long Haul
-description: Long Form Jekyll theme built with SASS / COMPASS / SUSY
+title: Todd Wells
+description: Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud
 
-url: http://brianmaierjr.github.com/long-haul
+url: http://twellspring.github.io
 baseurl: ""
 paginate_path: "blog/page:num/"
 permalink: blog/:title/
@@ -16,13 +16,11 @@ navigation:
    url: /index.html
  - title: About
    url: /about
- - title: Contact
-   url: /contact
 
 social:
-   github: brianmaierjr
-   twitter: brianmaierjr
-   facebook: brianmaierjr
-   email: brimaidesigns@gmail.com
+   github: twellspring
+   twitter: todd_wells
+   #facebook: brianmaierjr
+   email: todd@wells.ws
 
-google_analytics: "UA-58263416-1"
+#google_analytics: "UA-58263416-1"
