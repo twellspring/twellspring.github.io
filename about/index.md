@@ -1,9 +1,9 @@
 ---
-
-layout: post
-
+layout: default
 title: About
 ---
+
+<h1> <p align="center">About</p></h1>
 
 Todd is a technical Linchpin with a long term unrealized goal of automating and training himself out of a job. This quest for unemployment started with working hard to realize the perfection of the **lazy sysadmin**. At the same time he attempted **TKT** ( Total Knowledge Transfer ) as a Linux/Open Source advocate and teacher to the technical and becoming-technical people around him.
 
