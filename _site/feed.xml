@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Todd Wells</title>
+    <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
+    <link>http://twellspring.github.io/</link>
+    <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 27 Mar 2016 18:21:24 -0700</pubDate>
+    <lastBuildDate>Sun, 27 Mar 2016 18:21:24 -0700</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Chatops and Hubot the basics</title>
+        <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
+* node.js 5.x
+* npm
+* git&lt;/p&gt;
+
+&lt;p&gt;So what was left from the &lt;a href=&quot;https://hubot.github.com/docs/&quot;&gt;hubot installation instructions &lt;/a&gt;
+* Install hubot libraries/components: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install -g yo generator-hubot&lt;/code&gt;
+* Generate an instance of hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir hubot; cd hubot; yo hubot&lt;/code&gt;
+* Start hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/Hubot&lt;/code&gt;
+* Stop hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;control-c&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And I had a hubot instance running.   I could give it commands on the command line and get responses.  help showed me all the things that come by default.  After trying all the default commands out, I disabled several items that I did not want ( like google translate.)  To remove one of the pre-bundled items you need to
+1. Remove the item from package.json
+2. Delete the node_modules/xxxxx directory of the same name
+3. Remove the entry from &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt;
+4. start/restart hubot&lt;/p&gt;
+
+&lt;p&gt;There are many additional plugins available at &lt;a href=&quot;https://github.com/hubot-scripts&quot;&gt;hubot scripts&lt;/a&gt;.  Two that I installed are
+* hubot-auth - user roles to be used for command authorization
+* hubot-diagnostics - some tools to help with basic troubleshooting&lt;/p&gt;
+
+&lt;p&gt;To install a plugin
+1. &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install  --save xxxxxx&lt;/code&gt;
+2. edit &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt; and add the plugin
+3. start/restart hubot&lt;/p&gt;
+
+&lt;p&gt;Now to get slack working.  I had my slack admin create a hubot integration and give me the token.   Then it is just
+1. Install the plugin: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install --save hubot-slack&lt;/code&gt;
+2. To my environment add the slack token: &lt;code class=&quot;highlighter-rouge&quot;&gt;export HUBOT_SLACK_TOKEN=xoxb-XXXX-XXXXXX-XXXXXX-XXXXXX&lt;/code&gt;
+3. Start hubot with slack enabled:  &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/hubot --adapter slack&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;And all of a sudden hubot showed up in my slack as a bot.  Invite hubot to a room and then he will listen there.&lt;/p&gt;
+
+&lt;p&gt;Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires &lt;code class=&quot;highlighter-rouge&quot;&gt;export&lt;/code&gt; in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use “normally” formatted .env files.  That edit has been &lt;a href=&quot;https://github.com/github/hubot/issues/1153&quot;&gt;submitted to github&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;With it, my .env now has three variables
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+HUBOT_SLACK_TOKEN=xoxb-XXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXX
+HUBOT_AUTH_ADMIN=1
+HUBOT_SALT_AUTH=XXXXXXXXXXXXXXXXXX
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The First variable I have already talked about.  The remaining two will be covered in the next two posts about Saltstack and Security.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
+* node.js 5.x
+* npm
+* git&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 27 Mar 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/chatops-and-hubot-the-basics/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/chatops-and-hubot-the-basics/</guid>
+        
+        
+      </item>
+      
+    
+      
+      <item>
+        <title>Chatops Integration with Automation Tools</title>
+        <description>&lt;p&gt;Discovering ChatOps and a couple of hours of googling/reading lead me down the garden path of how to Integrate. I am using &lt;a href=&quot;http://saltstack.com/&quot;&gt;SaltStack&lt;/a&gt; for IT Automation ( sorry no Puppet/Chef here). SaltStack has served that role admirably. And now I want to move forward with ChatOps. To do that of course ChatOps needs to talk to SaltStack, which means a bot. And the bot that seemed the best to me was &lt;a href=&quot;https://hubot.github.com/&quot;&gt;Hubot&lt;/a&gt; from those fine people at github that started this whole ChatOps thing.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, when I looked at how to get Hubot and Slack talking I let scope creep come in. I decided that a tool that already groked ChatOps and spoke both hubot-ese and slack-ese would be a good idea. This was a best intention for I wanted to make sure I was not contributing to integration hell with dozens of different integrations to our chat software Slack. There are already several different sources sending data into Slack. And ChatOps will be another one. And then there is SalesForce integration to slack. And I am sure many more to come. What If I could put a tool in place that would be the gateway between Slack and all of these tools. It would be a layer of abstraction that could be good to have.&lt;/p&gt;
+
+&lt;p&gt;And so I ended up trying two options: &lt;a href=&quot;https://stackstorm.com/&quot;&gt;StackStorm&lt;/a&gt; and &lt;a href=&quot;http://rundeck.org/&quot;&gt;Rundeck&lt;/a&gt;. I liked both of these tools for different reasons, but I thought that the more dynamic event driven jobs scheduling model of StackStorm fit better. After all, ChatOps is also event driven so using StackStorm with its integrations to the major chat platforms seemed like a good solution. The StackStorm all-in-one installer got me up and running quickly, but with a few problems with the integration to SaltSack. Thanks to the very responsive ( and Slack based ) &lt;strong&gt;community&lt;/strong&gt; group at StackStorm I was able to get it working.&lt;/p&gt;
+
+&lt;p&gt;And by working I mean I now have every salt command available inside of my Slack, including the ability to run arbitrary commands against any server … test, staging, PROD. Nope, not going to leave that in place. ChatOps needs some limits, so I set forth to figure out how to limit it to just what I wanted to expose. But hours later I was not really making progress on those limits. The integration layer between StackStorm and the Hubot bot that actually connected to Slack did not really seem to have the flexibility to do what I wanted. Or if it did it was going to take a lot of work to figure out and there was not a lot of information out there to help me.&lt;/p&gt;
+
+&lt;p&gt;Time to regroup and re-assess. The gateway ( StackStorm ) was making the job of integrating my SaltStack and Slack harder, and I was not convinced that my goal of using it as a single point of integration was really going to work. And so I jettisoned the scope creep and went back to a simple integration between SaltStack and Hubot.&lt;/p&gt;
+
+&lt;p&gt;Note: I really did like what StackStorm was trying to do and I am thinking that once I have some better experience with ChatOps under my belt I will be revisiting their solution as a dynamic job scheduler that might or might not integrate with the stand-alone hubot I am setting up now.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;Discovering ChatOps and a couple of hours of googling/reading lead me down the garden path of how to Integrate. I am using &lt;a href=&quot;http://saltstack.com/&quot;&gt;SaltStack&lt;/a&gt; for IT Automation ( sorry no Puppet/Chef here). SaltStack has served that role admirably. And now I want to move forward with ChatOps. To do that of course ChatOps needs to talk to SaltStack, which means a bot. And the bot that seemed the best to me was &lt;a href=&quot;https://hubot.github.com/&quot;&gt;Hubot&lt;/a&gt; from those fine people at github that started this whole ChatOps thing.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Wed, 23 Mar 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/chatops-integration-with-automation-tools/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/chatops-integration-with-automation-tools/</guid>
+        
+        
+      </item>
+      
+    
+      
+      <item>
+        <title>ChatOps FOMO</title>
+        <description>&lt;p&gt;A month ago I “discovered” the term &lt;strong&gt;ChatOps&lt;/strong&gt; and was a little surprised it has been around for over 3 years. Guess I have missed out, but not any more. Time to get me some ChatOps. But first, thanks to the &lt;a href=&quot;https://speakerdeck.com/jnewland/chatops&quot;&gt;githubbers&lt;/a&gt; who came up with this idea.&lt;/p&gt;
+
+&lt;p&gt;I liked &lt;a href=&quot;https://www.pagerduty.com/blog/what-is-chatops/&quot;&gt;this definition of ChatOps&lt;/a&gt;. It starts with a culture where chat is the method of development collaboration and adds in tools so that actions are part of the conversation. If you don’t already have the culture adding tools will not really help. But if you do have the culture then adding in the tooling will just make collaboration that much better.&lt;/p&gt;
+
+&lt;p&gt;It only took a few minutes of research for me to understand how valuable this could be. There was definitely coincidence involved in that quick understanding. As the DevOps engineer for a &amp;gt; 20 developer shop, I was used to the requests “can you change staging server xxx-xxxxx-xxx-1 to track branch feature/yyyyyyyyy” happening a few times per week. But in the 2 days before I discovered “ChatOps” it started happening several times per day. The “&lt;a href=&quot;http://www.thegeekstuff.com/2011/07/lazy-sysadmin/&quot;&gt;lazy sysadmin&lt;/a&gt;” in me had of course automated the process so it only took a minute to satisfy these requests. But the increase in frequency was causing chafing at having to make this change at all. Now comes ChatOps as a solution to this chafing.&lt;/p&gt;
+
+&lt;p&gt;But how to implement ChatOps. My next hour or two of research gave me many possibilities, and lead me down a path of frustration and eventually starting over and going with the simple solution.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;A month ago I “discovered” the term &lt;strong&gt;ChatOps&lt;/strong&gt; and was a little surprised it has been around for over 3 years. Guess I have missed out, but not any more. Time to get me some ChatOps. But first, thanks to the &lt;a href=&quot;https://speakerdeck.com/jnewland/chatops&quot;&gt;githubbers&lt;/a&gt; who came up with this idea.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 20 Mar 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/chatops-fomo/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/chatops-fomo/</guid>
+        
+        
+      </item>
+      
+    
+  </channel>
+</rss>
