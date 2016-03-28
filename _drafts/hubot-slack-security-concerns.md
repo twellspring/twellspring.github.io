@@ -11,3 +11,7 @@ First out was sub-routine at the top of each script that limited PROD access to 
 Next will be middleware to handle the above
 
 eventually there will be roles to give better control of
+
+
+
+AUTH_ADMIN=1 allows me to be an admin when I run hubot locally for development.  To test non-admin functionality, just change that value and restart.  More on Admin and security issues later. 
