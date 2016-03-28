@@ -5,62 +5,78 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Mar 2016 18:34:52 -0700</pubDate>
-    <lastBuildDate>Sun, 27 Mar 2016 18:34:52 -0700</lastBuildDate>
+    <pubDate>Sun, 27 Mar 2016 20:55:24 -0700</pubDate>
+    <lastBuildDate>Sun, 27 Mar 2016 20:55:24 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       
       <item>
         <title>Chatops and Hubot the basics</title>
-        <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
-* node.js 5.x
-* npm
-* git&lt;/p&gt;
+        <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed&lt;/p&gt;
 
-&lt;p&gt;So what was left from the &lt;a href=&quot;https://hubot.github.com/docs/&quot;&gt;hubot installation instructions &lt;/a&gt;
-* Install hubot libraries/components: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install -g yo generator-hubot&lt;/code&gt;
-* Generate an instance of hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir hubot; cd hubot; yo hubot&lt;/code&gt;
-* Start hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/Hubot&lt;/code&gt;
-* Stop hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;control-c&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;node.js 5.x&lt;/li&gt;
+  &lt;li&gt;npm&lt;/li&gt;
+  &lt;li&gt;git&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;And I had a hubot instance running.   I could give it commands on the command line and get responses.  help showed me all the things that come by default.  After trying all the default commands out, I disabled several items that I did not want ( like google translate.)  To remove one of the pre-bundled items you need to
-1. Remove the item from package.json
-2. Delete the node_modules/xxxxx directory of the same name
-3. Remove the entry from &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt;
-4. start/restart hubot&lt;/p&gt;
+&lt;p&gt;So what was left from the &lt;a href=&quot;https://hubot.github.com/docs/&quot;&gt;hubot installation instructions &lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;There are many additional plugins available at &lt;a href=&quot;https://github.com/hubot-scripts&quot;&gt;hubot scripts&lt;/a&gt;.  Two that I installed are
-* hubot-auth - user roles to be used for command authorization
-* hubot-diagnostics - some tools to help with basic troubleshooting&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Install hubot libraries/components: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install -g yo generator-hubot&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Generate an instance of hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;mkdir hubot; cd hubot; yo hubot&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Start hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/Hubot&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Stop hubot: &lt;code class=&quot;highlighter-rouge&quot;&gt;control-c&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;To install a plugin
-1. &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install  --save xxxxxx&lt;/code&gt;
-2. edit &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt; and add the plugin
-3. start/restart hubot&lt;/p&gt;
+&lt;p&gt;And I had a hubot instance running.   I could give it commands on the command line and get responses.  help showed me all the things that come by default.  After trying all the default commands out, I disabled several items that I did not want ( like google translate.)  To remove one of the pre-bundled items you need to&lt;/p&gt;
 
-&lt;p&gt;Now to get slack working.  I had my slack admin create a hubot integration and give me the token.   Then it is just
-1. Install the plugin: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install --save hubot-slack&lt;/code&gt;
-2. To my environment add the slack token: &lt;code class=&quot;highlighter-rouge&quot;&gt;export HUBOT_SLACK_TOKEN=xoxb-XXXX-XXXXXX-XXXXXX-XXXXXX&lt;/code&gt;
-3. Start hubot with slack enabled:  &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/hubot --adapter slack&lt;/code&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Remove the item from package.json&lt;/li&gt;
+  &lt;li&gt;Delete the node_modules/xxxxx directory of the same name&lt;/li&gt;
+  &lt;li&gt;Remove the entry from &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;start/restart hubot&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There are many additional plugins available at &lt;a href=&quot;https://github.com/hubot-scripts&quot;&gt;hubot scripts&lt;/a&gt;.  Two that I installed are&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;hubot-auth - user roles to be used for command authorization&lt;/li&gt;
+  &lt;li&gt;hubot-diagnostics - some tools to help with basic troubleshooting&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To install a plugin&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;npm install  --save xxxxxx&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;edit &lt;code class=&quot;highlighter-rouge&quot;&gt;external-scripts.json&lt;/code&gt; and add the plugin&lt;/li&gt;
+  &lt;li&gt;start/restart hubot&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now to get slack working.  I had my slack admin create a hubot integration and give me the token.   Then it is just&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Install the plugin: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install --save hubot-slack&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;To my environment add the slack token: &lt;code class=&quot;highlighter-rouge&quot;&gt;export HUBOT_SLACK_TOKEN=xoxb-XXXX-XXXXXX-XXXXXX-XXXXXX&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Start hubot with slack enabled:  &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/hubot --adapter slack&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;And all of a sudden hubot showed up in my slack as a bot.  Invite hubot to a room and then he will listen there.&lt;/p&gt;
 
 &lt;p&gt;Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires &lt;code class=&quot;highlighter-rouge&quot;&gt;export&lt;/code&gt; in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use “normally” formatted .env files.  That edit has been &lt;a href=&quot;https://github.com/github/hubot/issues/1153&quot;&gt;submitted to github&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;With it, my .env now has three variables
-&lt;code class=&quot;highlighter-rouge&quot;&gt;
-HUBOT_SLACK_TOKEN=xoxb-XXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXX
+&lt;p&gt;With it, my .env now has three variables&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HUBOT_SLACK_TOKEN=xoxb-XXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXX
 HUBOT_AUTH_ADMIN=1
 HUBOT_SALT_AUTH=XXXXXXXXXXXXXXXXXX
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The First variable I have already talked about.  The remaining two will be covered in the next two posts about Saltstack and Security.&lt;/p&gt;
 </description>
         
-          <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
-* node.js 5.x
-* npm
-* git&lt;/p&gt;
+          <description>&lt;p&gt;Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed&lt;/p&gt;
 
 </description>
         
