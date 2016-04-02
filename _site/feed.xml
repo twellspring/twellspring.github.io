@@ -5,9 +5,76 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Mar 2016 20:55:24 -0700</pubDate>
-    <lastBuildDate>Sun, 27 Mar 2016 20:55:24 -0700</lastBuildDate>
+    <pubDate>Fri, 01 Apr 2016 21:31:21 -0700</pubDate>
+    <lastBuildDate>Fri, 01 Apr 2016 21:31:21 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Hubot Saltstack Integration</title>
+        <description>&lt;p&gt;Before finding ChatOps the strategy was to create our own salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. It also allowed for aggregation/wrapper functions to present the data in a better way than was available from the Saltstack API. When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person. And our internal salt-api provides a control layer to strictly limit what ChatOps can do as I am still not confident enough in Hubot’s security design/implementation to trust it with full access to all salt commands and by extension to all facets of production servers.&lt;/p&gt;
+
+&lt;p&gt;The actual implementation of a salt command follows this pattern&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;robot.respond&lt;/li&gt;
+  &lt;li&gt;http request to salt&lt;/li&gt;
+  &lt;li&gt;error checking&lt;/li&gt;
+  &lt;li&gt;response to user&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is some boilerplate code for getting information about a server from salt-api
+( if needed, scroll left/right in text box to see full lines)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /Get information about server (server)? *([\w-_]+)/i, (msg) -&amp;gt;
+  deployApp = msg.match[1]
+  httpURL = &quot;#{saltUrl}/server/#{serverName}&quot;
+  msg.http(httpURL)
+    .headers(&#39;Content-Type&#39;: &#39;application/json&#39;, &#39;Authorization&#39;: saltAuth)
+    .get() (err, res, body) -&amp;gt;
+      try
+        jsonBody = JSON.parse(body)
+        if jsonBody.result != &quot;failure&quot;
+          textBody = JSON.stringify(jsonBody, null, 2)
+          msg.reply &quot;Here is information about `#{serverName}`\n```#{textBody}```&quot;
+        else
+          msg.reply &quot;I could not find any information.  Are you sure `#{serverName}` is a real server?&quot;
+      catch error
+        msg.reply &quot;There was an general error:\n#{err}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Though this code is specific to the internal salt-api, the same methodology works for accessing Saltstack API.&lt;/p&gt;
+
+&lt;p&gt;For my initial ChatOps deploy the MVP ( Minimum Viable Product) was&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;list types of servers&lt;/li&gt;
+  &lt;li&gt;list all servers of a given type&lt;/li&gt;
+  &lt;li&gt;Get information about a particular server ( ip, version of app installed, …. )&lt;/li&gt;
+  &lt;li&gt;Deploy a new app branch/tag/hash to a server&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the longer requests like deploy add in a msg.send line before the msg.http.  This gives immediate feedback to the user so they know that Hubot is on the job.  Something like:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;msg.send &quot;Deploying #{version} to #{server}. \nIf this takes a few minutes, it is probably due to a slow `npm install`.&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And with the above in place, I introduced ChatOps to my developers in a new slack room &lt;code class=&quot;highlighter-rouge&quot;&gt;staging&lt;/code&gt;.   Many commented on how cool this was, and they played with the commands.  But it took a few days until people started really using the above server commands.   It quickly became apparent that having all Hubot commands in that one room made a big mess.  The goal of this room was to have a log of changes being made to staging, but with all the &lt;code class=&quot;highlighter-rouge&quot;&gt;pug me&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ship it&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;help&lt;/code&gt; commands it was quite unreadable.  So I went looking for how &lt;code class=&quot;highlighter-rouge&quot;&gt;staging&lt;/code&gt; could be brought back to the goal.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;Before finding ChatOps the strategy was to create our own salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. It also allowed for aggregation/wrapper functions to present the data in a better way than was available from the Saltstack API. When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person. And our internal salt-api provides a control layer to strictly limit what ChatOps can do as I am still not confident enough in Hubot’s security design/implementation to trust it with full access to all salt commands and by extension to all facets of production servers.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Fri, 01 Apr 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/hubot-salt-integration/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/hubot-salt-integration/</guid>
+        
+        
+      </item>
+      
     
       
       <item>
