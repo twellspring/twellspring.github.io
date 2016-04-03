@@ -5,16 +5,18 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 01 Apr 2016 21:31:21 -0700</pubDate>
-    <lastBuildDate>Fri, 01 Apr 2016 21:31:21 -0700</lastBuildDate>
+    <pubDate>Sun, 03 Apr 2016 08:52:31 -0700</pubDate>
+    <lastBuildDate>Sun, 03 Apr 2016 08:52:31 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       
       <item>
         <title>Hubot Saltstack Integration</title>
-        <description>&lt;p&gt;Before finding ChatOps the strategy was to create our own salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. It also allowed for aggregation/wrapper functions to present the data in a better way than was available from the Saltstack API. When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person. And our internal salt-api provides a control layer to strictly limit what ChatOps can do as I am still not confident enough in Hubot’s security design/implementation to trust it with full access to all salt commands and by extension to all facets of production servers.&lt;/p&gt;
+        <description>&lt;p&gt;Before finding ChatOps our strategy was to create a salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API that returns JSON.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. Much of the time the salt commands returned JSON that could be passed directly through the salt-api which made many salt-api commands easy to implement.  But there are cases where I found it beneficial to run multiple salt commands and aggregate data or to limit what part of the JSON data returned by salt gets returned through the salt-api.&lt;/p&gt;
 
-&lt;p&gt;The actual implementation of a salt command follows this pattern&lt;/p&gt;
+&lt;p&gt;When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person so, like above, this allows the Hubot developer to not have to know Saltstack intimately. And our internal salt-api provides a control layer to strictly limit what ChatOps can do.  This is important as at this point I am not confident enough in Hubot’s security design &amp;amp; implementation to trust it with full access to all salt commands and by extension to all facets of production servers. ( But as it is open source, I will be looking into this in the future. )&lt;/p&gt;
+
+&lt;p&gt;And so to integrate Hubot with my salt-api was a standard CoffeeScript http call.  The pattern for my Hubotized salt commands follow this pattern&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;robot.respond&lt;/li&gt;
@@ -26,8 +28,8 @@
 &lt;p&gt;Here is some boilerplate code for getting information about a server from salt-api
 ( if needed, scroll left/right in text box to see full lines)&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /Get information about server (server)? *([\w-_]+)/i, (msg) -&amp;gt;
-  deployApp = msg.match[1]
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /Get information about server *([\w-_]+)/i, (msg) -&amp;gt;
+  serverName = msg.match[1]
   httpURL = &quot;#{saltUrl}/server/#{serverName}&quot;
   msg.http(httpURL)
     .headers(&#39;Content-Type&#39;: &#39;application/json&#39;, &#39;Authorization&#39;: saltAuth)
@@ -40,31 +42,57 @@
         else
           msg.reply &quot;I could not find any information.  Are you sure `#{serverName}` is a real server?&quot;
       catch error
-        msg.reply &quot;There was an general error:\n#{err}&quot;
+        msg.reply &quot;There was an general error:\n#{err} getting data aboug #{serverName}&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Though this code is specific to the internal salt-api, the same methodology works for accessing Saltstack API.&lt;/p&gt;
+&lt;p&gt;Though this code is specific to the internal salt-api, the same methodology works for accessing Saltstack API.  And doing POST/PUT requests just requires changing the method and passing the appropriate body.&lt;/p&gt;
 
-&lt;p&gt;For my initial ChatOps deploy the MVP ( Minimum Viable Product) was&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (msg) -&amp;gt;
+  appName     = msg.match[1]
+  serverName  = msg.match[2]
+  appVersion = msg.match[3]
+
+  postData = JSON.stringify({
+    version: appVersion
+  })
+
+  httpURL = &quot;#{saltUrl}/server/#{serverName}&quot;/app/#{appName}&quot;
+
+  msg.http(httpURL)
+    .headers(&#39;Content-Type&#39;: &#39;application/json&#39;, &#39;Authorization&#39;: saltAuth)
+    .put(postData) (err, res, body) -&amp;gt;
+      try
+        jsonBody = JSON.parse(body)
+        if jsonBody.result != &quot;failure&quot;
+          msg.reply &quot;Successfully deployed #{appName} to #{serverName}&quot;
+        else
+          msg.reploy robot.riskalyze.replyCC(msg, deployEnv, &quot;Error deploying #{appName} to #{serverName}&quot;
+      catch error
+        msg.reply &quot;There was an general error:\n#{err} deploying #{appName} to #{serverName}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;My nascent Hubot skills are sufficient now to create a MVP ( minimum viable product ) for my company ChatOps. &lt;br /&gt;
+For my initial ChatOps deploy the MVP is&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;list types of servers&lt;/li&gt;
   &lt;li&gt;list all servers of a given type&lt;/li&gt;
   &lt;li&gt;Get information about a particular server ( ip, version of app installed, …. )&lt;/li&gt;
-  &lt;li&gt;Deploy a new app branch/tag/hash to a server&lt;/li&gt;
+  &lt;li&gt;Deploy an app branch/tag/hash to a server&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;For the longer requests like deploy add in a msg.send line before the msg.http.  This gives immediate feedback to the user so they know that Hubot is on the job.  Something like:&lt;/p&gt;
+&lt;p&gt;For the longer requests like deploy I decided to add in a msg.send line before the msg.http.  This gives immediate feedback to the user so they know that Hubot is on the job.  Something like:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;msg.send &quot;Deploying #{version} to #{server}. \nIf this takes a few minutes, it is probably due to a slow `npm install`.&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;And with the above in place, I introduced ChatOps to my developers in a new slack room &lt;code class=&quot;highlighter-rouge&quot;&gt;staging&lt;/code&gt;.   Many commented on how cool this was, and they played with the commands.  But it took a few days until people started really using the above server commands.   It quickly became apparent that having all Hubot commands in that one room made a big mess.  The goal of this room was to have a log of changes being made to staging, but with all the &lt;code class=&quot;highlighter-rouge&quot;&gt;pug me&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ship it&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;help&lt;/code&gt; commands it was quite unreadable.  So I went looking for how &lt;code class=&quot;highlighter-rouge&quot;&gt;staging&lt;/code&gt; could be brought back to the goal.&lt;/p&gt;
+&lt;p&gt;And with the above in place, I introduced ChatOps to my developers in a new slack room dedicated to hubot.   Many commented on how cool this was, and they played with the commands.  But it took a few days until people started really using the above server commands.   It quickly became apparent that having all Hubot commands in that one room made a big mess.  The goal of this room was to have a log of changes being made via Hubot, but with all the &lt;code class=&quot;highlighter-rouge&quot;&gt;pug me&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ship it&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;help&lt;/code&gt; commands it was quite unreadable.  So I went looking for how our dedicated room could be brought back to the goal.&lt;/p&gt;
 </description>
         
-          <description>&lt;p&gt;Before finding ChatOps the strategy was to create our own salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. It also allowed for aggregation/wrapper functions to present the data in a better way than was available from the Saltstack API. When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person. And our internal salt-api provides a control layer to strictly limit what ChatOps can do as I am still not confident enough in Hubot’s security design/implementation to trust it with full access to all salt commands and by extension to all facets of production servers.&lt;/p&gt;
+          <description>&lt;p&gt;Before finding ChatOps our strategy was to create a salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API that returns JSON.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. Much of the time the salt commands returned JSON that could be passed directly through the salt-api which made many salt-api commands easy to implement.  But there are cases where I found it beneficial to run multiple salt commands and aggregate data or to limit what part of the JSON data returned by salt gets returned through the salt-api.&lt;/p&gt;
 
 </description>
         
