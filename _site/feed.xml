@@ -5,9 +5,92 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Apr 2016 10:21:30 -0700</pubDate>
-    <lastBuildDate>Sun, 03 Apr 2016 10:21:30 -0700</lastBuildDate>
+    <pubDate>Sun, 03 Apr 2016 16:04:22 -0700</pubDate>
+    <lastBuildDate>Sun, 03 Apr 2016 16:04:22 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Hubot Carbon Copy a Channel</title>
+        <description>&lt;p&gt;My pondering on how to clearly log Hubot initiated saltstack changes to a Slack channel without having a bunch of &lt;strong&gt;help&lt;/strong&gt; and &lt;strong&gt;pug me&lt;/strong&gt; in the channel lead to developing a method to carbon copy (cc).  A cc would allow developers communicate with Hubot via Direct Message (DM) but to have the results of any action command ( i.e. commands that initiate changes to a server) in the desired Slack channel.  The documentation did not cover this, and googling lead me to some outdated solutions that no longer work.  But a little persistence and some looking at the code lead me to the solution of using robot.messageRoom, which is now documented on the &lt;a href=&quot;https://github.com/github/hubot/blob/master/docs/scripting.md&quot;&gt;Hubot scripting page &lt;/a&gt; ( or will be when &lt;a href=&quot;https://github.com/github/hubot/pull/1161&quot;&gt;the pull request&lt;/a&gt; is merged).&lt;/p&gt;
+
+&lt;p&gt;So with robot.messageRoom I can add a CC after the msg.reply lines in the examples from my previous post.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ccChannel = &quot;some_channel&quot;
+if jsonBody.result != &quot;failure&quot;
+  msg.reply &quot;Successfully deployed #{appName} to #{serverName}&quot;
+  robot.messageRoom ccChannel, &quot;Successfully deployed #{appName} to #{serverName}&quot;
+else
+  msg.reply &quot;Error deploying #{appName} to #{serverName}&quot;
+  robot.messageRoom ccChannel msg.reply &quot;Error deploying #{appName} to #{serverName}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now when someone runs the deploy command via DM, in my channel that tracks staging changes I see a line&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Hubot BOT [6:22 PM]
+@someuser: Successfully deployed www to server xxx-xxx-xxx-1&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;which shows the change made and who made it.   That’s just what we need, and I would have left it at this if I did not accidentally run a deploy command in the same channel as is defined for the cc.  And you guessed it … duplicate messages.   That’s not going to work.   And likewise I do not want to see duplicate messages when I am testing new commands locally via the Hubot command line.   So we now need to turn this into a function that has the logic necessary to suppress duplicates and can be called from multiple locations.  Creating a local function is my first try and I got that working without too much frustration and head-banging.  I decided to stick with “room” in my code as that is the generic term Hubot uses which in Slack’s case maps to a channel.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module.exports = (robot) -&amp;gt;
+
+  ccRoom = &quot;some_channel&quot;
+
+  cc = (msg, ccRoom, ccText) -&amp;gt;
+    room = msg.envelope.room
+    user = msg.envelope.user.name
+
+    return if ccRoom == room
+    return if user == &quot;Shell&quot;
+
+    robot.messageRoom ccRoom &quot;#{ccText}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A couple of CoffeeScript notes here.   The CoffeeScript &lt;strong&gt;return&lt;/strong&gt; call will exit the function without processing any more lines.  And the pattern “command if test” means those means those lines only get executed if the condition statement evaluates to true.  I like what I did above as the code is cleaner and more readable than a typical compound if-then-else&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if ccRoom == room
+  return
+else
+  if user == &quot;Shell&quot;
+    return
+  else
+    robot.messageRoom ccRoom &quot;#{ccText}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;or using an &lt;strong&gt;or&lt;/strong&gt; in the if statement.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if ccRoom == room or user == &quot;Shell&quot;
+  return
+else
+  robot.messageRoom ccRoom &quot;#{ccText}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Notes done … back to the originally scheduled subject.   Using this new function requires replacing each robot.messageRoom line with a cc line.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  cc(msg, ccRoom, &quot;Successfully deployed #{appName} to #{serverName}&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;While this works, I already have a couple of CoffeeScript files and this definition needs to be at the top of each one that needs to do a cc.  That is only one file for now, but I am sure there will be many more in the near future.  So using the local function is not a long term viable solution.  I need to be able to define this globally, and that ccRoom variable also needs to be defined globally.  One step forward, two steps back.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;My pondering on how to clearly log Hubot initiated saltstack changes to a Slack channel without having a bunch of &lt;strong&gt;help&lt;/strong&gt; and &lt;strong&gt;pug me&lt;/strong&gt; in the channel lead to developing a method to carbon copy (cc).  A cc would allow developers communicate with Hubot via Direct Message (DM) but to have the results of any action command ( i.e. commands that initiate changes to a server) in the desired Slack channel.  The documentation did not cover this, and googling lead me to some outdated solutions that no longer work.  But a little persistence and some looking at the code lead me to the solution of using robot.messageRoom, which is now documented on the &lt;a href=&quot;https://github.com/github/hubot/blob/master/docs/scripting.md&quot;&gt;Hubot scripting page &lt;/a&gt; ( or will be when &lt;a href=&quot;https://github.com/github/hubot/pull/1161&quot;&gt;the pull request&lt;/a&gt; is merged).&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 03 Apr 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/hubot-carbon-copy-channel/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/hubot-carbon-copy-channel/</guid>
+        
+        
+      </item>
+      
     
       
       <item>
@@ -67,7 +150,7 @@
         if jsonBody.result != &quot;failure&quot;
           msg.reply &quot;Successfully deployed #{appName} to #{serverName}&quot;
         else
-          msg.reploy robot.riskalyze.replyCC(msg, deployEnv, &quot;Error deploying #{appName} to #{serverName}&quot;
+          msg.reply &quot;Error deploying #{appName} to #{serverName}&quot;
       catch error
         msg.reply &quot;There was an general error:\n#{err} deploying #{appName} to #{serverName}&quot;
 &lt;/code&gt;&lt;/pre&gt;

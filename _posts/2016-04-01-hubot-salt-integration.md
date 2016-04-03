@@ -57,7 +57,7 @@ robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (m
         if jsonBody.result != "failure"
           msg.reply "Successfully deployed #{appName} to #{serverName}"
         else
-          msg.reploy robot.riskalyze.replyCC(msg, deployEnv, "Error deploying #{appName} to #{serverName}"
+          msg.reply "Error deploying #{appName} to #{serverName}"
       catch error
         msg.reply "There was an general error:\n#{err} deploying #{appName} to #{serverName}"
 ```

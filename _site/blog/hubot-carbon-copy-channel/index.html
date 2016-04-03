@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Hubot Saltstack Integration</title>
+    <title>Hubot Carbon Copy a Channel</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon-tw.png" />
@@ -20,7 +20,7 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
-    <link rel="canonical" href="http://twellspring.github.io/blog/hubot-salt-integration/">
+    <link rel="canonical" href="http://twellspring.github.io/blog/hubot-carbon-copy-channel/">
 
     <!-- Modernizr -->
     <script src="/assets/js/modernizr.custom.15390.js" type="text/javascript"></script>
@@ -58,100 +58,84 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle">Hubot Saltstack Integration</h1>
-  <p class="meta">April 01, 2016 | <span class="time">3</span> Minute Read</p>
+  <h1 class="postTitle">Hubot Carbon Copy a Channel</h1>
+  <p class="meta">April 03, 2016 | <span class="time">3</span> Minute Read</p>
   
-  <p>Before finding ChatOps our strategy was to create a salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API that returns JSON.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. Much of the time the salt commands returned JSON that could be passed directly through the salt-api which made many salt-api commands easy to implement.  But there are cases where I found it beneficial to run multiple salt commands and aggregate data or to limit what part of the JSON data returned by salt gets returned through the salt-api.</p>
+  <p>My pondering on how to clearly log Hubot initiated saltstack changes to a Slack channel without having a bunch of <strong>help</strong> and <strong>pug me</strong> in the channel lead to developing a method to carbon copy (cc).  A cc would allow developers communicate with Hubot via Direct Message (DM) but to have the results of any action command ( i.e. commands that initiate changes to a server) in the desired Slack channel.  The documentation did not cover this, and googling lead me to some outdated solutions that no longer work.  But a little persistence and some looking at the code lead me to the solution of using robot.messageRoom, which is now documented on the <a href="https://github.com/github/hubot/blob/master/docs/scripting.md">Hubot scripting page </a> ( or will be when <a href="https://github.com/github/hubot/pull/1161">the pull request</a> is merged).</p>
 
-<p>When ChatOps “arrived”, the decisions for the above methodology still made sense.  In the future the Saltstack and Hubot development might not always be done by the same person so, like above, this allows the Hubot developer to not have to know Saltstack intimately. And our internal salt-api provides a control layer to strictly limit what ChatOps can do.  This is important as at this point I am not confident enough in Hubot’s security design &amp; implementation to trust it with full access to all salt commands and by extension to all facets of production servers. ( But as it is open source, I will be looking into this in the future. )</p>
+<p>So with robot.messageRoom I can add a CC after the msg.reply lines in the examples from my previous post.</p>
 
-<p>And so to integrate Hubot with my salt-api was a standard CoffeeScript http call.  The pattern for my Hubotized salt commands follow this pattern</p>
-
-<ul>
-  <li>robot.respond</li>
-  <li>http request to salt</li>
-  <li>error checking</li>
-  <li>response to user</li>
-</ul>
-
-<p>Here is some boilerplate code for getting information about a server from salt-api
-( if needed, scroll left/right in text box to see full lines)</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>robot.respond /Get information about server *([\w-_]+)/i, (msg) -&gt;
-  serverName = msg.match[1]
-  httpURL = "#{saltUrl}/server/#{serverName}"
-  msg.http(httpURL)
-    .headers('Content-Type': 'application/json', 'Authorization': saltAuth)
-    .get() (err, res, body) -&gt;
-      try
-        jsonBody = JSON.parse(body)
-        if jsonBody.result != "failure"
-          textBody = JSON.stringify(jsonBody, null, 2)
-          msg.reply "Here is information about `#{serverName}`\n```#{textBody}```"
-        else
-          msg.reply "I could not find any information.  Are you sure `#{serverName}` is a real server?"
-      catch error
-        msg.reply "There was an general error:\n#{err} getting data aboug #{serverName}"
+<div class="highlighter-rouge"><pre class="highlight"><code>ccChannel = "some_channel"
+if jsonBody.result != "failure"
+  msg.reply "Successfully deployed #{appName} to #{serverName}"
+  robot.messageRoom ccChannel, "Successfully deployed #{appName} to #{serverName}"
+else
+  msg.reply "Error deploying #{appName} to #{serverName}"
+  robot.messageRoom ccChannel msg.reply "Error deploying #{appName} to #{serverName}"
 </code></pre>
 </div>
 
-<p>Though this code is specific to the internal salt-api, the same methodology works for accessing Saltstack API.  And doing POST/PUT requests just requires changing the method and passing the appropriate body.</p>
+<p>Now when someone runs the deploy command via DM, in my channel that tracks staging changes I see a line</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (msg) -&gt;
-  appName     = msg.match[1]
-  serverName  = msg.match[2]
-  appVersion = msg.match[3]
+<blockquote>
+  <p>Hubot BOT [6:22 PM]
+@someuser: Successfully deployed www to server xxx-xxx-xxx-1</p>
+</blockquote>
 
-  postData = JSON.stringify({
-    version: appVersion
-  })
+<p>which shows the change made and who made it.   That’s just what we need, and I would have left it at this if I did not accidentally run a deploy command in the same channel as is defined for the cc.  And you guessed it … duplicate messages.   That’s not going to work.   And likewise I do not want to see duplicate messages when I am testing new commands locally via the Hubot command line.   So we now need to turn this into a function that has the logic necessary to suppress duplicates and can be called from multiple locations.  Creating a local function is my first try and I got that working without too much frustration and head-banging.  I decided to stick with “room” in my code as that is the generic term Hubot uses which in Slack’s case maps to a channel.</p>
 
-  httpURL = "#{saltUrl}/server/#{serverName}"/app/#{appName}"
+<div class="highlighter-rouge"><pre class="highlight"><code>module.exports = (robot) -&gt;
 
-  msg.http(httpURL)
-    .headers('Content-Type': 'application/json', 'Authorization': saltAuth)
-    .put(postData) (err, res, body) -&gt;
-      try
-        jsonBody = JSON.parse(body)
-        if jsonBody.result != "failure"
-          msg.reply "Successfully deployed #{appName} to #{serverName}"
-        else
-          msg.reply "Error deploying #{appName} to #{serverName}"
-      catch error
-        msg.reply "There was an general error:\n#{err} deploying #{appName} to #{serverName}"
+  ccRoom = "some_channel"
+
+  cc = (msg, ccRoom, ccText) -&gt;
+    room = msg.envelope.room
+    user = msg.envelope.user.name
+
+    return if ccRoom == room
+    return if user == "Shell"
+
+    robot.messageRoom ccRoom "#{ccText}"
 </code></pre>
 </div>
 
-<p>My nascent Hubot skills are sufficient now to create a MVP ( minimum viable product ) for my company ChatOps. <br />
-For my initial ChatOps deploy the MVP is</p>
+<p>A couple of CoffeeScript notes here.   The CoffeeScript <strong>return</strong> call will exit the function without processing any more lines.  And the pattern “command if test” means those means those lines only get executed if the condition statement evaluates to true.  I like what I did above as the code is cleaner and more readable than a typical compound if-then-else</p>
 
-<ul>
-  <li>list types of servers</li>
-  <li>list all servers of a given type</li>
-  <li>Get information about a particular server ( ip, version of app installed, …. )</li>
-  <li>Deploy an app branch/tag/hash to a server</li>
-</ul>
-
-<p>For the longer requests like deploy I decided to add in a msg.send line before the msg.http.  This gives immediate feedback to the user so they know that Hubot is on the job.  Something like:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>msg.send "Deploying #{version} to #{server}. \nIf this takes a few minutes, it is probably due to a slow `npm install`."
+<div class="highlighter-rouge"><pre class="highlight"><code>if ccRoom == room
+  return
+else
+  if user == "Shell"
+    return
+  else
+    robot.messageRoom ccRoom "#{ccText}"
 </code></pre>
 </div>
 
-<p>And with the above in place, I introduced ChatOps to my developers in a new slack room dedicated to hubot.   Many commented on how cool this was, and they played with the commands.  But it took a few days until people started really using the above server commands.   It quickly became apparent that having all Hubot commands in that one room made a big mess.  The goal of this room was to have a log of changes being made via Hubot, but with all the <code class="highlighter-rouge">pug me</code>, <code class="highlighter-rouge">ship it</code> and <code class="highlighter-rouge">help</code> commands it was quite unreadable.  So I went looking for how our dedicated room could be brought back to the goal.</p>
+<p>or using an <strong>or</strong> in the if statement.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>if ccRoom == room or user == "Shell"
+  return
+else
+  robot.messageRoom ccRoom "#{ccText}"
+</code></pre>
+</div>
+
+<p>Notes done … back to the originally scheduled subject.   Using this new function requires replacing each robot.messageRoom line with a cc line.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  cc(msg, ccRoom, "Successfully deployed #{appName} to #{serverName}")
+</code></pre>
+</div>
+
+<p>While this works, I already have a couple of CoffeeScript files and this definition needs to be at the top of each one that needs to do a cc.  That is only one file for now, but I am sure there will be many more in the near future.  So using the local function is not a long term viable solution.  I need to be able to define this globally, and that ccRoom variable also needs to be defined globally.  One step forward, two steps back.</p>
 
 
   <!-- POST NAVIGATION -->
   <div class="postNav clearfix">
      
-      <a class="prev" href="/blog/chatops-and-hubot-the-basics/"><span>&laquo;&nbsp;Chatops and Hubot the basics</span>
+      <a class="prev" href="/blog/hubot-salt-integration/"><span>&laquo;&nbsp;Hubot Saltstack Integration</span>
       
     </a>
       
-      
-      <a class="next" href="/blog/hubot-carbon-copy-channel/"><span>Hubot Carbon Copy a Channel&nbsp;&raquo;</span>
-       
-      </a>
      
   </div>
 </div>
