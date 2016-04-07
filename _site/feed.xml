@@ -5,9 +5,101 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Apr 2016 16:04:22 -0700</pubDate>
-    <lastBuildDate>Sun, 03 Apr 2016 16:04:22 -0700</lastBuildDate>
+    <pubDate>Wed, 06 Apr 2016 22:02:33 -0700</pubDate>
+    <lastBuildDate>Wed, 06 Apr 2016 22:02:33 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Hubot Global Functions</title>
+        <description>&lt;p&gt;Researching global functions in Hubot lead me down two interesting paths: Classes and Middleware.  Middleware is pretty well documented on the &lt;a href=&quot;https://github.com/github/hubot/blob/master/docs/scripting.md&quot;&gt;Hubot Scripting page&lt;/a&gt;.  Classes on the other hand not so much.   So for learning about those … you guessed it … go to the code.  And with that I see that while Middleware has other uses, the Class is what I will use to create what I am calling a &lt;strong&gt;global function&lt;/strong&gt; (in javascript terminology this is a class with a method).   In another .coffee file in the scripts directory, create a Class and then a method in that class for the CC script. I decided to create a class with my company name as the class.  I will add other global functions under this same class so they are all grouped under my company name.  This methodology is likely to change as I learn more, but its working for now.  Here is what it looks like.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module.exports = (robot) -&amp;gt;
+
+  class myCompany
+
+    cc: (msg, ccRoom, ccText) -&amp;gt;
+      room = msg.envelope.room
+      user = msg.envelope.user.name
+
+      return if ccRoom == room
+      return if user == &quot;Shell&quot;
+
+      robot.messageRoom ccRoom &quot;#{ccText}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Notice I had to change the = after the local function name into a colin for method name.  Other than that the function could be moved as is.   Now to call it.   In my code replace the cc line with&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  robot.myCompany.cc(msg, ccRoom, &quot;Successfully deployed #{appName} to #{serverName}&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That makes pretty quick work out of the first half.   Now what to do with that global variable.  As I thought about this I realized one global variable would not solve the problem.  Where a CC goes will depend on the input.   In my case I wanted to be able to cc a different room based on the environment of the server that a command is being run on ( test, stage, prod).   This will require 3 pieces&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a method to get an environment out of a server name&lt;/li&gt;
+  &lt;li&gt;a map of strings to room name&lt;/li&gt;
+  &lt;li&gt;a call to the map to convert the server environment to the room name&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here are the three pieces in code.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server_split = server_name.split &quot;-&quot;
+server_env = server_split[3]
+
+slackRoomMap =
+  test: process.env.HUBOT_SLACK_TEST_ROOM
+  stage: process.env.HUBOT_SLACK_STAGING_ROOM
+  prod: process.env.HUBOT_SLACK_PROD_ROOM
+
+ccRoom = slackRoomMap[ccString] ? ccString
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Using the split method to get the environment works because my server names are well formed and the 4th section is always an environment.   Since the split function array starts at 0, server_split[3] is the fourth object in the array.  The slackRoom map is a basic CoffeeScript object literal. And replyRoom is set using the bracket notation to access the appropriate value in the object literal.  ? is an existential operator which returns the value after the ? if the value before does not exist or is null.  In English, this means if there is no match in the slackRoomMap to treat the passed ccSting as ccRoom.  So I can now pass either an enviroment name or a room name and the CC will go to the appropriate room in either case.&lt;/p&gt;
+
+&lt;p&gt;My revised global function now looks like this.   Note the change in the ccRoom in the method definition to ccString.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module.exports = (robot) -&amp;gt;
+
+  class myCompany
+
+    cc: (msg, ccString, ccText) -&amp;gt;
+      room = msg.envelope.room
+      user = msg.envelope.user.name
+
+      slackRoomMap =
+        test: process.env.HUBOT_SLACK_TEST_ROOM
+        stage: process.env.HUBOT_SLACK_STAGING_ROOM
+        prod: process.env.HUBOT_SLACK_PROD_ROOM
+
+      ccRoom = slackRoomMap[ccString] ? ccString
+
+      return if ccRoom == room
+      return if user == &quot;Shell&quot;
+
+      robot.messageRoom ccRoom &quot;#{ccText}&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;For where I am in my Hubot development this is sufficient as I don’t see any near future needs for more mappings.   Of course I would rather have a more elegant method for setting these rooms, maybe pass yaml/json in the ENV variable or some other good trick.  But I have to keep telling myself not to try to do to much.  If in the future I need a better method for mapping rooms I can deal with it then.&lt;/p&gt;
+
+&lt;p&gt;Next up is the ( hopefully ) last piece I need for a Hubot MVP ( Minimum Viable Product ) … security.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;Researching global functions in Hubot lead me down two interesting paths: Classes and Middleware.  Middleware is pretty well documented on the &lt;a href=&quot;https://github.com/github/hubot/blob/master/docs/scripting.md&quot;&gt;Hubot Scripting page&lt;/a&gt;.  Classes on the other hand not so much.   So for learning about those … you guessed it … go to the code.  And with that I see that while Middleware has other uses, the Class is what I will use to create what I am calling a &lt;strong&gt;global function&lt;/strong&gt; (in javascript terminology this is a class with a method).   In another .coffee file in the scripts directory, create a Class and then a method in that class for the CC script. I decided to create a class with my company name as the class.  I will add other global functions under this same class so they are all grouped under my company name.  This methodology is likely to change as I learn more, but its working for now.  Here is what it looks like.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 05 Apr 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/hubot-global-functions/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/hubot-global-functions/</guid>
+        
+        
+      </item>
+      
     
       
       <item>
@@ -241,7 +333,7 @@ For my initial ChatOps deploy the MVP is&lt;/p&gt;
 
 &lt;p&gt;And all of a sudden hubot showed up in my slack as a bot.  Invite hubot to a room and then he will listen there.&lt;/p&gt;
 
-&lt;p&gt;Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires &lt;code class=&quot;highlighter-rouge&quot;&gt;export&lt;/code&gt; in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use “normally” formatted .env files.  That edit has been &lt;a href=&quot;https://github.com/github/hubot/issues/1153&quot;&gt;submitted to github&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires **export in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use “normally” formatted .env files.  That edit has been &lt;a href=&quot;https://github.com/github/hubot/issues/1153&quot;&gt;submitted to github&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;With it, my .env now has three variables&lt;/p&gt;
 

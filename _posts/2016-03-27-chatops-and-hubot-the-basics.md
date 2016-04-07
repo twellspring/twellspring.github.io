@@ -42,7 +42,7 @@ Now to get slack working.  I had my slack admin create a hubot integration and g
 
 And all of a sudden hubot showed up in my slack as a bot.  Invite hubot to a room and then he will listen there.
 
-Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires `export` in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use "normally" formatted .env files.  That edit has been [submitted to github](https://github.com/github/hubot/issues/1153)
+Something that I found missing from hubot was the ability to use .env files like all my other node apps ( using dotenv or similar ).  Hubot can use a .env file but it requires **export in front of each line.   I am using a modified node_modules/.bin/hubot to allow me to use "normally" formatted .env files.  That edit has been [submitted to github](https://github.com/github/hubot/issues/1153)
 
 With it, my .env now has three variables
 
