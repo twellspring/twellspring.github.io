@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Hubot Global Functions</title>
+    <title>Using Hubot Middleware to Restrict Rooms</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon-tw.png" />
@@ -20,7 +20,7 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
-    <link rel="canonical" href="http://twellspring.github.io/blog/hubot-global-functions/">
+    <link rel="canonical" href="http://twellspring.github.io/blog/using-hubot-middleware-to-restrict-rooms/">
 
     <!-- Modernizr -->
     <script src="/assets/js/modernizr.custom.15390.js" type="text/javascript"></script>
@@ -58,97 +58,57 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle">Hubot Global Functions</h1>
-  <p class="meta">April 05, 2016 | <span class="time">3</span> Minute Read</p>
+  <h1 class="postTitle">Using Hubot Middleware to Restrict Rooms</h1>
+  <p class="meta">April 12, 2016 | <span class="time">2</span> Minute Read</p>
   
-  <p>Researching global functions in Hubot lead me down two interesting paths: Classes and Middleware.  Middleware is pretty well documented on the <a href="https://github.com/github/hubot/blob/master/docs/scripting.md">Hubot Scripting page</a>.  Classes on the other hand not so much.   So for learning about those … you guessed it … go to the code.  And with that I see that while Middleware has other uses, the Class is what I will use to create what I am calling a <strong>global function</strong> (in javascript terminology this is a class with a method).   In another .coffee file in the scripts directory, create a Class and then a method in that class for the CC script. I decided to create a class with my company name as the class.  I will add other global functions under this same class so they are all grouped under my company name.  This methodology is likely to change as I learn more, but its working for now.  Here is what it looks like.</p>
+  <p>Today’s post is a small diversion from the security topic I planned because something came up that I wanted to address first … where hubot could be accessed from.   Slack’s Hubot integration creates Hubot as a robot similar to slackbot, except that hubot has to be invited to a channel where slackbot is already listening in every channel.   Since Hubot is being used for ChatOps, I want to limit where server commands can be executed.  Limiting what channel hubot is in does not work as anyone can invite hubot to a new channel.    So the limits need to be within hubot.   This could be done on a per command basis, but that complexity and granularity is not needed at this time. So for now it will be a global limit on all hubot commands to certain channels.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>module.exports = (robot) -&gt;
+<p><a href="https://github.com/github/hubot/blob/master/docs/scripting.md#execution-process-and-api">Hubot Middleware</a> is the tool for this job.  The room limiting logic will be a white list.  Any command in a room not on the white list will be silently dropped.</p>
 
-  class myCompany
+<p>Time for a new file <code class="highlighter-rouge">middleware.coffee</code></p>
 
-    cc: (msg, ccRoom, ccText) -&gt;
-      room = msg.envelope.room
-      user = msg.envelope.user.name
+<div class="highlighter-rouge"><pre class="highlight"><code># Description:
+#   Middleware Commands
+#
+# Dependencies:
+#
+# Commands:
+#
+# Notes:
+#
 
-      return if ccRoom == room
-      return if user == "Shell"
+module.exports = (robot) -&gt;
 
-      robot.messageRoom ccRoom "#{ccText}"
+  robot.receiveMiddleware (context, next, done) -&gt;
+    room = context.response.message.room
+    next() if room in ['staging', 'testing'  ]
+    done()
 </code></pre>
 </div>
 
-<p>Notice I had to change the = after the local function name into a colin for method name.  Other than that the function could be moved as is.   Now to call it.   In my code replace the cc line with</p>
+<p>The receiveMiddleware acts after the listener ( robot.respond, … ) matches but before the body of the listener function executes.  It gets the room from the context object and compares it to a list.  If there is a match the <code class="highlighter-rouge">next()</code> sends the request on to be processed to normally.   If it does not match <code class="highlighter-rouge">done()</code> silently stops this request and nothing more happens.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  robot.myCompany.cc(msg, ccRoom, "Successfully deployed #{appName} to #{serverName}")
+<p>A quick test in my local development environment shows a problem.   No commands now work.   Adding a logging line after the room value is set ( <code class="highlighter-rouge">console.log "room = #{room}"</code> ) shows the issue.   When using locally, the room is <strong>Shell</strong>, same as the user name.    I could put Shell in the list, but putting in the user name value rather than a fixed <strong>Shell</strong> will also allow Slack DM to work as Slack Direct Messages also have a room name equal to the user name.    Here is the improved middleware.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  # Limit responses to the listed rooms, Shell and Slack DM
+  robot.receiveMiddleware (context, next, done) -&gt;
+    room = context.response.message.room
+    user = context.response.message.user.name
+    next() if room in ['staging', 'testing', user ]
+    done()
 </code></pre>
 </div>
 
-<p>That makes pretty quick work out of the first half.   Now what to do with that global variable.  As I thought about this I realized one global variable would not solve the problem.  Where a CC goes will depend on the input.   In my case I wanted to be able to cc a different room based on the environment of the server that a command is being run on ( test, stage, prod).   This will require 3 pieces</p>
-
-<ul>
-  <li>a method to get an environment out of a server name</li>
-  <li>a map of strings to room name</li>
-  <li>a call to the map to convert the server environment to the room name</li>
-</ul>
-
-<p>Here are the three pieces in code.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>server_split = server_name.split "-"
-server_env = server_split[3]
-
-slackRoomMap =
-  test: process.env.HUBOT_SLACK_TEST_ROOM
-  stage: process.env.HUBOT_SLACK_STAGING_ROOM
-  prod: process.env.HUBOT_SLACK_PROD_ROOM
-
-ccRoom = slackRoomMap[ccString] ? ccString
-
-</code></pre>
-</div>
-
-<p>Using the split method to get the environment works because my server names are well formed and the 4th section is always an environment.   Since the split function array starts at 0, server_split[3] is the fourth object in the array.  The slackRoom map is a basic CoffeeScript object literal. And replyRoom is set using the bracket notation to access the appropriate value in the object literal.  ? is an existential operator which returns the value after the ? if the value before does not exist or is null.  In English, this means if there is no match in the slackRoomMap to treat the passed ccSting as ccRoom.  So I can now pass either an enviroment name or a room name and the CC will go to the appropriate room in either case.</p>
-
-<p>My revised global function now looks like this.   Note the change in the ccRoom in the method definition to ccString.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>module.exports = (robot) -&gt;
-
-  class myCompany
-
-    cc: (msg, ccString, ccText) -&gt;
-      room = msg.envelope.room
-      user = msg.envelope.user.name
-
-      slackRoomMap =
-        test: process.env.HUBOT_SLACK_TEST_ROOM
-        stage: process.env.HUBOT_SLACK_STAGING_ROOM
-        prod: process.env.HUBOT_SLACK_PROD_ROOM
-
-      ccRoom = slackRoomMap[ccString] ? ccString
-
-      return if ccRoom == room
-      return if user == "Shell"
-
-      robot.messageRoom ccRoom "#{ccText}"
-</code></pre>
-</div>
-
-<p>For where I am in my Hubot development this is sufficient as I don’t see any near future needs for more mappings.   Of course I would rather have a more elegant method for setting these rooms, maybe pass yaml/json in the ENV variable or some other good trick.  But I have to keep telling myself not to try to do to much.  If in the future I need a better method for mapping rooms I can deal with it then.</p>
-
-<p>Next up is the ( hopefully ) last piece I need for a Hubot MVP ( Minimum Viable Product ) … security.</p>
+<p>Done and done.  Now even if a user invites Hubot somewhere he should not be, Hubot will not respond.</p>
 
 
   <!-- POST NAVIGATION -->
   <div class="postNav clearfix">
      
-      <a class="prev" href="/blog/hubot-carbon-copy-channel/"><span>&laquo;&nbsp;Hubot Carbon Copy a Channel</span>
+      <a class="prev" href="/blog/hubot-global-functions/"><span>&laquo;&nbsp;Hubot Global Functions</span>
       
     </a>
       
-      
-      <a class="next" href="/blog/using-hubot-middleware-to-restrict-rooms/"><span>Using Hubot Middleware to Restrict Rooms&nbsp;&raquo;</span>
-       
-      </a>
      
   </div>
 </div>

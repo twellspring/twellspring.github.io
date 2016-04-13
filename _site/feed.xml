@@ -5,9 +5,65 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 06 Apr 2016 22:02:33 -0700</pubDate>
-    <lastBuildDate>Wed, 06 Apr 2016 22:02:33 -0700</lastBuildDate>
+    <pubDate>Tue, 12 Apr 2016 21:24:34 -0700</pubDate>
+    <lastBuildDate>Tue, 12 Apr 2016 21:24:34 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Using Hubot Middleware to Restrict Rooms</title>
+        <description>&lt;p&gt;Today’s post is a small diversion from the security topic I planned because something came up that I wanted to address first … where hubot could be accessed from.   Slack’s Hubot integration creates Hubot as a robot similar to slackbot, except that hubot has to be invited to a channel where slackbot is already listening in every channel.   Since Hubot is being used for ChatOps, I want to limit where server commands can be executed.  Limiting what channel hubot is in does not work as anyone can invite hubot to a new channel.    So the limits need to be within hubot.   This could be done on a per command basis, but that complexity and granularity is not needed at this time. So for now it will be a global limit on all hubot commands to certain channels.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/github/hubot/blob/master/docs/scripting.md#execution-process-and-api&quot;&gt;Hubot Middleware&lt;/a&gt; is the tool for this job.  The room limiting logic will be a white list.  Any command in a room not on the white list will be silently dropped.&lt;/p&gt;
+
+&lt;p&gt;Time for a new file &lt;code class=&quot;highlighter-rouge&quot;&gt;middleware.coffee&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Description:
+#   Middleware Commands
+#
+# Dependencies:
+#
+# Commands:
+#
+# Notes:
+#
+
+module.exports = (robot) -&amp;gt;
+
+  robot.receiveMiddleware (context, next, done) -&amp;gt;
+    room = context.response.message.room
+    next() if room in [&#39;staging&#39;, &#39;testing&#39;  ]
+    done()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The receiveMiddleware acts after the listener ( robot.respond, … ) matches but before the body of the listener function executes.  It gets the room from the context object and compares it to a list.  If there is a match the &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; sends the request on to be processed to normally.   If it does not match &lt;code class=&quot;highlighter-rouge&quot;&gt;done()&lt;/code&gt; silently stops this request and nothing more happens.&lt;/p&gt;
+
+&lt;p&gt;A quick test in my local development environment shows a problem.   No commands now work.   Adding a logging line after the room value is set ( &lt;code class=&quot;highlighter-rouge&quot;&gt;console.log &quot;room = #{room}&quot;&lt;/code&gt; ) shows the issue.   When using locally, the room is &lt;strong&gt;Shell&lt;/strong&gt;, same as the user name.    I could put Shell in the list, but putting in the user name value rather than a fixed &lt;strong&gt;Shell&lt;/strong&gt; will also allow Slack DM to work as Slack Direct Messages also have a room name equal to the user name.    Here is the improved middleware.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  # Limit responses to the listed rooms, Shell and Slack DM
+  robot.receiveMiddleware (context, next, done) -&amp;gt;
+    room = context.response.message.room
+    user = context.response.message.user.name
+    next() if room in [&#39;staging&#39;, &#39;testing&#39;, user ]
+    done()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Done and done.  Now even if a user invites Hubot somewhere he should not be, Hubot will not respond.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;Today’s post is a small diversion from the security topic I planned because something came up that I wanted to address first … where hubot could be accessed from.   Slack’s Hubot integration creates Hubot as a robot similar to slackbot, except that hubot has to be invited to a channel where slackbot is already listening in every channel.   Since Hubot is being used for ChatOps, I want to limit where server commands can be executed.  Limiting what channel hubot is in does not work as anyone can invite hubot to a new channel.    So the limits need to be within hubot.   This could be done on a per command basis, but that complexity and granularity is not needed at this time. So for now it will be a global limit on all hubot commands to certain channels.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 12 Apr 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/using-hubot-middleware-to-restrict-rooms/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/using-hubot-middleware-to-restrict-rooms/</guid>
+        
+        
+      </item>
+      
     
       
       <item>
