@@ -5,9 +5,81 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 12 Apr 2016 21:24:34 -0700</pubDate>
-    <lastBuildDate>Tue, 12 Apr 2016 21:24:34 -0700</lastBuildDate>
+    <pubDate>Tue, 19 Apr 2016 22:06:52 -0700</pubDate>
+    <lastBuildDate>Tue, 19 Apr 2016 22:06:52 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      
+      <item>
+        <title>Hubot and Slack Security concerns</title>
+        <description>&lt;p&gt;The last post used middleware to restrict what room commands can run it.  But there is still no restrictions on who can use a command and what server they can run it on.   It does not take my 10 years of work at financial companies and countless audits to know that this level of open access is not a good idea.   So before Hubot gets implemented I want to have a minimal level of security.   Remember I am going for MVP here, not what I think will be the end all security design a year from now.   Walk before running.&lt;/p&gt;
+
+&lt;p&gt;The minimum I see is:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Admins can run commands like deploy on any server&lt;/li&gt;
+  &lt;li&gt;Non-admins can run commands like deploy only on testing servers&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Fortunately all my servers have well defined names and the environment of a server can be easily parsed out of the name&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server_split = server_name.split &quot;-&quot;
+server_env = server_split[3]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now I just need put a check at the top of the deploy command that will check the above server_env.   I created a global function to validate the above two conditions are met:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module.exports = (robot) -&amp;gt;
+
+  class myCompany
+
+    restrictServer: (msg,server) -&amp;gt;
+      user = msg.envelope.user
+      server_split = server_name.split &quot;-&quot;
+      server_env = server_split[3]
+      return false if server_env == &#39;test&#39;
+      return false if robot.auth.isAdmin(user)
+
+      msg.send &quot;You are not authorized to run this command on #{server}&quot;
+      return true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The two lines starting with &lt;strong&gt;return false&lt;/strong&gt; are my conditions.   If either of these conditions are met the function returns false, which means the command should not be restricted.   If both are not true it sends a message and returns true.  The first checks if the server is a test server.  If so, anyone can deploy to it.   The second checks if the user is an Admin, which is defined in the environment when starting up Hubot.&lt;/p&gt;
+
+&lt;p&gt;Now at the top of my deploy command ( and any other command that needs this security)  I put in a check&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (msg) -&amp;gt;
+  appName     = msg.match[1]
+  serverName  = msg.match[2]
+  appVersion = msg.match[3]
+
+  return if robot.myCompany.restrictServer(msg, serverName )
+  ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To test this I used local Hubot.  Adding &lt;code class=&quot;highlighter-rouge&quot;&gt;HUBOT_AUTH_ADMIN=1&lt;/code&gt; to the environment means the Shell user is an admin and &lt;code class=&quot;highlighter-rouge&quot;&gt;HUBOT_AUTH_ADMIN=2&lt;/code&gt; ( or any other value ) means Shell is not.  This allowed me to validate the above restrictions worked as I expected. Then when I deploy this to my production server and run it with Slack I will add my Slack ID to the &lt;code class=&quot;highlighter-rouge&quot;&gt;HUBOT_AUTH_ADMIN&lt;/code&gt; variable.&lt;/p&gt;
+
+&lt;p&gt;Just to clarify, restrictServer being true will cause the &lt;code class=&quot;highlighter-rouge&quot;&gt;return&lt;/code&gt; line above to exit the robot.respond function and not process the rest of the command.   This is what we want.  Only if restrictServer returns false ( do not restrict server ) do we want to continue.   And the only way restrictServer returns false if one of the two conditions I set forth at the beginning of this article is met.&lt;/p&gt;
+
+&lt;p&gt;After testing this thoroughly locally I was ready to deploy Hubot to Slack ( without telling anyone ) so that I could test it there.  Then when I was confident that users could only affect test servers I told the developers about Hubot and let the flood of &lt;strong&gt;pug me&lt;/strong&gt; command commence.&lt;/p&gt;
+
+&lt;p&gt;MVP done and ChatOps 1.0.0 released to my company with much excitement, and a week or two later developers start to really use it.   Life is pretty good.   But of course being a devops/sysadmin/linux/unix guy I am not satisfied with this and want to improve upon it.  And that 10 years of Financial screams at me for the first improvement to be in security.   Sigh, I guess I can’t ignore that voice.   So better security is up next, and I think we need some kind of role based authentication/authorization.   Slack takes care of the authentication and we can use the hubot-auth model for the roles and authorization.&lt;/p&gt;
+</description>
+        
+          <description>&lt;p&gt;The last post used middleware to restrict what room commands can run it.  But there is still no restrictions on who can use a command and what server they can run it on.   It does not take my 10 years of work at financial companies and countless audits to know that this level of open access is not a good idea.   So before Hubot gets implemented I want to have a minimal level of security.   Remember I am going for MVP here, not what I think will be the end all security design a year from now.   Walk before running.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Tue, 19 Apr 2016 00:00:00 -0700</pubDate>
+        <link>http://twellspring.github.io/blog/hubot-slack-security-concerns/</link>
+        <guid isPermaLink="true">http://twellspring.github.io/blog/hubot-slack-security-concerns/</guid>
+        
+        
+      </item>
+      
     
       
       <item>
