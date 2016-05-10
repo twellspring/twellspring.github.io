@@ -41,7 +41,7 @@ There are now several new commands:
 ! who has <role> role - Find out who has the given role
 ```
 
-This module uses the slack user IDs for authentication.  To add a slack user to a group use their ID ( what you see after the @ in a mention in a room).   In the below mythical example these IDs are <firstname><lastname>.  Here are the developers and qa added to roles.
+This module uses the slack user IDs for authentication.  To add a slack user to a group use their ID ( what you see after the @ in a mention in a room).   In the below mythical example these IDs are **firstlast**.  Here the developers and qa staff are added to roles.
 
 ```
 ! malreynold has developer role
@@ -55,7 +55,7 @@ Hubot: @rivertam: OK, washwashburne has the 'developer' role.
 Hubot: @rivertam: OK, shepherdbook has the 'qa' role.
 ```
 
-Now to restrict these new user roles.  The method I decided to use was to create a restrictCommand global function.  Then in each module we create the first lines will specify what roles can use that module.
+Now to restrict commands/modules using these new user roles.  The method I decided to use was to create a restrictCommand global function which can be called from each module that needs to be restricted.
 
 ```
 restrictCommand: (msg,allowedRoles) ->
@@ -76,9 +76,9 @@ restrictCommand: (msg,allowedRoles) ->
   return true
 ```
 
-It starts will allowing admins ( they are Gods after all ), followed by a simple loop to check for membership in a group.  If either of these match, we return a **false**, which means the command is not restricted.   If one of these does not pass we return true, but not before adding some color to our hubot by having a set of famous quotes or snarky replies that hubot will randomly choose from.   Because it is part of the ChatOps ethos to not take ourselves too seriously.
+It starts with allowing admins ( they are Gods after all so can use all modules ), followed by a simple loop to check for membership in a group.  If either of these if statements is true then the function return a **false** meaning the command should not be restricted.   Otherwise a true is returned (command is restricted), but not before adding some color to our hubot by having a set of famous quotes or snarky replies that hubot will randomly choose from.   Because it is part of the ChatOps ethos to not take ourselves too seriously.
 
-All that is left is to add a couple of lines to the top of a module/command we want to restrict.
+Now the lines that go at the top of a module/command to call the above function.
 
 ```
 robot.respond /list (apps|applications) on (server)? *([\w-_]+)/i, (msg) ->
@@ -87,8 +87,10 @@ robot.respond /list (apps|applications) on (server)? *([\w-_]+)/i, (msg) ->
   ...
 ```
 
-If restrictCommand returnes a true, then the command is exited.  So this command will restrict the **/list apps** module to Admins, developers and qa and anyone else gets a message back and the command does not run.  Add these two lines ( varying what roles are in allwedRoles as needed ) to every module that needs restricting.   If the same pattern is kept on all modules, a grep can be used to easily audit all of robot.respond command restrictions:
+The allowedRoles list is passed to restrictCommand.  If it returns a true then a **return** exits the robot.respond without running any of the rest of the robot.respond code.  The above example allow **/list apps** to be run by Admins, developers and qa while anyone else just gets our colorful message back.  Add these two lines ( varying what roles are in allwedRoles as needed ) to every module that needs restricting and you now have role based security in place.
+
+Audit Note:  if this same pattern is used on all modules, a grep can be used to easily audit all of robot.respond command restrictions. From the hubot root directory run this command to return a list of robot.respond lines followed by the allowedRoles.
 
 ```
-grep -A 1 -R robot.respond *
+grep -A 1 -R robot.respond scripts/*
 ```
