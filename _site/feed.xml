@@ -5,8 +5,8 @@
     <description>Techie type with his feet in the Sierra Nevada Mountains and his head in the cloud</description>
     <link>http://twellspring.github.io/</link>
     <atom:link href="http://twellspring.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 03 May 2016 08:58:32 -0700</pubDate>
-    <lastBuildDate>Tue, 03 May 2016 08:58:32 -0700</lastBuildDate>
+    <pubDate>Mon, 09 May 2016 21:43:46 -0700</pubDate>
+    <lastBuildDate>Mon, 09 May 2016 21:43:46 -0700</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       
@@ -46,10 +46,101 @@
       
       <item>
         <title>Security, Security, More Security</title>
-        <description>
+        <description>&lt;p&gt;The security put in place last time was not enough for me.   While it provides that no one can affect production servers except those in the hard-coded Hubot admin group, I don’t like that anyone who has a slack account can affect the test environment that our developers rely on.    So we need user groups with different levels of access.   I think 3 will do for demonstrating group access:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;God ( Admins )&lt;/li&gt;
+  &lt;li&gt;Developers&lt;/li&gt;
+  &lt;li&gt;QA&lt;/li&gt;
+  &lt;li&gt;Everyone else&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://github.com/hubot-scripts/hubot-auth&quot;&gt;hubot-auth module&lt;/a&gt; will provide us the ability to make these groups and as many more as we may need.  First lets install it.
+Add hubot-auth to your package.json file:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install --save hubot-auth
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and then add hubot-auth to external-scripts.json:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[
+  &quot;hubot-help&quot;,
+  &quot;hubot-pugme&quot;,
+  &quot;hubot-redis-brain&quot;,
+  &quot;hubot-rules&quot;,
+  &quot;hubot-auth&quot;,
+  &quot;hubot-shipit&quot;
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There are now several new commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;! &amp;lt;user&amp;gt; doesn&#39;t have &amp;lt;role&amp;gt; role - Removes a role from a user
+! &amp;lt;user&amp;gt; has &amp;lt;role&amp;gt; role - Assigns a role to a user
+! what roles do I have - Find out what roles you have
+! what roles does &amp;lt;user&amp;gt; have - Find out what roles a user has
+! who has &amp;lt;role&amp;gt; role - Find out who has the given role
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This module uses the slack user IDs for authentication.  To add a slack user to a group use their ID ( what you see after the @ in a mention in a room).   In the below mythical example these IDs are &lt;firstname&gt;&lt;lastname&gt;.  Here are the developers and qa added to roles.&lt;/lastname&gt;&lt;/firstname&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;! malreynold has developer role
+Hubot: @rivertam: OK, malreynold has the &#39;developer&#39; role.
+! zoewashburne has developer role
+Hubot: @rivertam: OK, zoewashburne has the &#39;developer&#39; role.
+! washwashburne has developer role
+Hubot: @rivertam: OK, washwashburne has the &#39;developer&#39; role.
+...
+! shepherdbook has qa role
+Hubot: @rivertam: OK, shepherdbook has the &#39;qa&#39; role.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now to restrict these new user roles.  The method I decided to use was to create a restrictCommand global function.  Then in each module we create the first lines will specify what roles can use that module.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;restrictCommand: (msg,allowedRoles) -&amp;gt;
+  return false if robot.auth.isAdmin(msg.envelope.user)
+  for allowedRole in allowedRoles
+    return false if robot.auth.hasRole(msg.envelope.user,allowedRole)
+
+  replies = [
+    &quot;Sorry, Charlie.&quot;,
+    &quot;But being this is a .44 Magnum, the most powerful handgun in the world
+    and would blow your head clean off, you&#39;ve gotta ask yourself one question:
+    &#39;Do I feel lucky?&#39; Well, do ya, punk?&quot;,
+    &quot;I&#39;m sorry, Dave. I&#39;m afraid I can&#39;t do that.&quot;,
+    &quot;Sometimes &#39;No&#39; is the kindest word. I&#39;m being kind now.&quot;,
+    &quot;Set phasers to stun.&quot;
+    ]
+  msg.send msg.random replies
+  return true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It starts will allowing admins ( they are Gods after all ), followed by a simple loop to check for membership in a group.  If either of these match, we return a &lt;strong&gt;false&lt;/strong&gt;, which means the command is not restricted.   If one of these does not pass we return true, but not before adding some color to our hubot by having a set of famous quotes or snarky replies that hubot will randomly choose from.   Because it is part of the ChatOps ethos to not take ourselves too seriously.&lt;/p&gt;
+
+&lt;p&gt;All that is left is to add a couple of lines to the top of a module/command we want to restrict.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;robot.respond /list (apps|applications) on (server)? *([\w-_]+)/i, (msg) -&amp;gt;
+  allowedRoles = [&quot;developer&quot;,&quot;qa&quot;]
+  return if robot.myCompany.restrictCommand(msg, allowedRoles )
+  ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If restrictCommand returnes a true, then the command is exited.  So this command will restrict the &lt;strong&gt;/list apps&lt;/strong&gt; module to Admins, developers and qa and anyone else gets a message back and the command does not run.  Add these two lines ( varying what roles are in allwedRoles as needed ) to every module that needs restricting.   If the same pattern is kept on all modules, a grep can be used to easily audit all of robot.respond command restrictions:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grep -A 1 -R robot.respond *
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
         
-          <description>
+          <description>&lt;p&gt;The security put in place last time was not enough for me.   While it provides that no one can affect production servers except those in the hard-coded Hubot admin group, I don’t like that anyone who has a slack account can affect the test environment that our developers rely on.    So we need user groups with different levels of access.   I think 3 will do for demonstrating group access:&lt;/p&gt;
+
 </description>
         
         <pubDate>Mon, 25 Apr 2016 00:00:00 -0700</pubDate>
