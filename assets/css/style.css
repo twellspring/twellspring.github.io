@@ -1109,7 +1109,7 @@ dd {
   }
 
   .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     padding: 0;
@@ -1145,7 +1145,7 @@ dd {
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    max-width: 800px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -1218,8 +1218,8 @@ dd {
     display: none;
   }
 
-  .post h1,.post h2,.post h3,.post h4,.post h5,.post h6,.post p,.post ul,.post ol,.post dl,.post .pageTitle {
-    width: 74.46809%;
+  .post h1,.post h2,.post h3,.post h4,.post h5,.post h6,.post p,.post ul,.post ol,.post dl,.post .pageTitle,.post pre {
+    width: 84.46809%;
     float: left;
     margin-right: 2.12766%;
     float: none;
@@ -1280,7 +1280,7 @@ dd {
 
   .footer .container {
     padding: 1rem 0;
-    max-width: 800px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
   }
