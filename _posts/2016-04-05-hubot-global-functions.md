@@ -47,7 +47,7 @@ ccRoom = slackRoomMap[ccString] ? ccString
 
 ```
 
-Using the split method to get the environment works because my server names are well formed and the 4th section is always an environment.   Since the split function array starts at 0, server_split[3] is the fourth object in the array.  The slackRoom map is a basic CoffeeScript object literal. And replyRoom is set using the bracket notation to access the appropriate value in the object literal.  ? is an existential operator which returns the value after the ? if the value before does not exist or is null.  In English, this means if there is no match in the slackRoomMap to treat the passed ccSting as ccRoom.  So I can now pass either an enviroment name or a room name and the CC will go to the appropriate room in either case.
+Using the split method to get the environment works because my server names are well formed and the 4th section is always an environment.   Since the split function array starts at 0, server_split[3] is the fourth object in the array.  The slackRoom map is a basic CoffeeScript object literal. And replyRoom is set using the bracket notation to access the appropriate value in the object literal.  ? is an existential operator which returns the value after the ? if the value before does not exist or is null.  In English, this means if there is no match in the slackRoomMap to treat the passed ccSting as ccRoom.  So I can now pass either an environment name or a room name and the CC will go to the appropriate room in either case.
 
 My revised global function now looks like this.   Note the change in the ccRoom in the method definition to ccString.
 
