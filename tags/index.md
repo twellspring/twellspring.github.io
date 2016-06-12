@@ -11,5 +11,5 @@ title: tags
 {% assign sortedtags = tags | upcase | split:' ' | sort %}
 
 {% for tag in sortedtags %}
-  <li><a href="/tags/{{ tag }}">{{ tag }} <span>({{ tag.size }})</span></a></li>
+  <li><a href="/tags/{{ tag | downcase }}">{{ tag }} <span>({{ tag.size }})</span></a></li>
 {% endfor %}
