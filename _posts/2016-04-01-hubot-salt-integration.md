@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Hubot Saltstack Integration
+tags: hubot chatops slack saltstack
 ---
 
 Before finding ChatOps our strategy was to create a salt-api in node.js that exposed just the needed parts of Saltstack via a RESTful API that returns JSON.  This would allow a developer to integrate Saltstack with our internal management tools with minimal understanding of salt. Much of the time the salt commands returned JSON that could be passed directly through the salt-api which made many salt-api commands easy to implement.  But there are cases where I found it beneficial to run multiple salt commands and aggregate data or to limit what part of the JSON data returned by salt gets returned through the salt-api.
@@ -62,7 +63,7 @@ robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (m
         msg.reply "There was an general error:\n#{err} deploying #{appName} to #{serverName}"
 ```
 
-My nascent Hubot skills are sufficient now to create a MVP ( minimum viable product ) for my company ChatOps.   
+My nascent Hubot skills are sufficient now to create a MVP ( minimum viable product ) for my company ChatOps.
 For my initial ChatOps deploy the MVP is
 
 * list types of servers

@@ -12,6 +12,13 @@ layout: default
   
   {{ content }}
 
+  <!-- TAGS -->
+  TAGS:
+  {% for tag in page.tags %}
+    <a href="/tags/{{tag}}">{{tag}}</a>
+  {% endfor %}
+  </ul>
+
   <!-- POST NAVIGATION -->
   <div class="postNav clearfix">
     {% if page.previous.url %} 

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Chatops and Hubot the basics
+tags: hubot chatops slack
 ---
 Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
 

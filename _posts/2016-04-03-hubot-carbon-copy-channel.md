@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Hubot Carbon Copy a Channel
+tags: hubot chatops slack saltstack
 ---
 
 My pondering on how to clearly log Hubot initiated saltstack changes to a Slack channel without having a bunch of **help** and **pug me** in the channel lead to developing a method to carbon copy (cc).  A cc would allow developers communicate with Hubot via Direct Message (DM) but to have the results of any action command ( i.e. commands that initiate changes to a server) in the desired Slack channel.  The documentation did not cover this, and googling lead me to some outdated solutions that no longer work.  But a little persistence and some looking at the code lead me to the solution of using robot.messageRoom, which is now documented on the [Hubot scripting page ](https://github.com/github/hubot/blob/master/docs/scripting.md) ( or will be when [the pull request](https://github.com/github/hubot/pull/1161) is merged).

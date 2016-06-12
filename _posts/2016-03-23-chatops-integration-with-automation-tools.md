@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Chatops Integration with Automation Tools
+tags: hubot chatops saltstack
 ---
 
 Discovering ChatOps and a couple of hours of googling/reading lead me down the garden path of how to Integrate. I am using [SaltStack](http://saltstack.com/) for IT Automation ( sorry no Puppet/Chef here). SaltStack has served that role admirably. And now I want to move forward with ChatOps. To do that of course ChatOps needs to talk to SaltStack, which means a bot. And the bot that seemed the best to me was [Hubot](https://hubot.github.com/) from those fine people at github that started this whole ChatOps thing.

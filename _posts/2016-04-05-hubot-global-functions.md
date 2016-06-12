@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Hubot Global Functions
+tags: hubot chatops slack
 ---
 
 Researching global functions in Hubot lead me down two interesting paths: Classes and Middleware.  Middleware is pretty well documented on the [Hubot Scripting page](https://github.com/github/hubot/blob/master/docs/scripting.md).  Classes on the other hand not so much.   So for learning about those ... you guessed it ... go to the code.  And with that I see that while Middleware has other uses, the Class is what I will use to create what I am calling a **global function** (in javascript terminology this is a class with a method).   In another .coffee file in the scripts directory, create a Class and then a method in that class for the CC script. I decided to create a class with my company name as the class.  I will add other global functions under this same class so they are all grouped under my company name.  This methodology is likely to change as I learn more, but its working for now.  Here is what it looks like.

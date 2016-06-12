@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Using Hubot Middleware to Restrict Rooms
+tags: hubot chatops slack security
 ---
 
 Today's post is a small diversion from the security topic I planned because something came up that I wanted to address first ... where hubot could be accessed from.   Slack's Hubot integration creates Hubot as a robot similar to slackbot, except that hubot has to be invited to a channel where slackbot is already listening in every channel.   Since Hubot is being used for ChatOps, I want to limit where server commands can be executed.  Limiting what channel hubot is in does not work as anyone can invite hubot to a new channel.    So the limits need to be within hubot.   This could be done on a per command basis, but that complexity and granularity is not needed at this time. So for now it will be a global limit on all hubot commands to certain channels.
