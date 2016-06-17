@@ -20,6 +20,7 @@ base:
     '*-node-*':
         - roles/node
 ```
+**Update**: the top.sls paths can use dots in place of slashes if desired ( roles.common = roles/common), but I prefer the slashes.  This is from SaltStack's early decision to use the python import model. (Thanks for the reminder [@n_vogel](https://twitter.com/@n_vogel) )
 
 But as I add more roles the top file gets more and more complex.   Right now I have 17 different roles.   So that is 17 different stanzas in the top file for my base environment.  And if I add in multiple environments ( test, stage, prod ) and servers with different functions that use the same node role, the top file is going to get really big and ugly.
 
@@ -81,7 +82,7 @@ cd nameslugs
 ln -s ../roles/vpn vpn
 ```
 
-Note that the symbolic link targets the vpn folder.  In that folder is an init.sls file that contains the actual vpn role. an alternative would be to use vpn.sls as the file and have the symbolic link target vpn.sls.  But I have found that using a folder gives more flexibility to associate additional files with a given pillar/role/state.
+The symbolic link targets the vpn folder.  In that folder is an init.sls file that contains the actual vpn role. An alternative would be to use vpn.sls as the file and have the symbolic link target vpn.sls.  But I have found that using a folder gives more flexibility to associate additional files with a given pillar/role/state.
 
 And the vpn role is completed with the init.sls file.
 ** pillar/roles/vpn/init.sls **
