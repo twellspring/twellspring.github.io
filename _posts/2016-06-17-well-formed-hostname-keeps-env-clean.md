@@ -4,9 +4,9 @@ title: Saltstack and a well formed hostname keeps environments clean
 tags: saltstack devops
 ---
 
-The well formed hostname in my last post helped connect servers to the appropriate pillars/roles while keeping the top file simple.  One part of the well formed hostname used, three to go.  Here I want to talk about another foundation of my salt ecosystem:  environments.  And you guessed it, I use another name part to facilitate environments.
+The well formed hostname in my last post helped connect servers to the appropriate pillars/roles while keeping the top file simple.  One part of the well formed hostname used, three to go.  Another foundational piece of a salt ecosystem is environments, and we can use another name part to facilitate environments.
 
-I have three salt environments:  test, stage, prod.  My basic salt development cycle is to develop new features in **TEST** which only has test minions used for testing new salt functionality.  Once I consider a feature "complete" it gets committed to my salt repo's stage branch, which is used to apply the changes to minions in our staging environment via a highstate.  If there are no problems the feature gets committed to my salt repo's master branch and applied to minions in our prod environment via highstate.
+I have three salt environments:  test, stage, prod.  My basic salt development cycle is to develop new features in test which only has test minions used for testing new salt functionality.  Once I consider a feature "complete" it gets committed to my salt repo's stage branch, which is used to apply the changes to minions in our staging environment via a highstate.  If there are no problems the feature gets committed to my salt repo's master branch and applied to minions in our prod environment via highstate.
 
 <sup>**Note**: SaltStack's default environment is **base**, git's default branch is **master** and  my   datacenter's default environment is **prod**.  So I have to know the correct "default" to use in the correct place, but they all are the same thing: production.   The git and salt environment defaults could be changed to prod so all three would match, but since I don't really see them often besides when I first setup a server, it has not been high priority.
 
@@ -41,7 +41,7 @@ pillar_roots:
 
 The file_roots section tells salt where to find the state files for a given environment.  Similarly pillar_roots tells salt where to find the pillar files for a given environment.  Each of the /data/repos folders is the same git repository, but with a different branch checked out.  This git repository contains /pillar and /state top level directories and all the pillar/states are within. master is set to the master branch, stage to the stage branch.  Test is pointed to whatever feature branch I am currently working on.
 
-I looked at the idea of having the stage and master branches independent.  With this method code common to both stage and prod gets committed to both branches and code specific to one branch is committed to only the relevant branch.  But this went against [git flow](http://nvie.com/posts/a-successful-git-branching-model/) which is used by everyone else in my dev team.   So instead I decided to stick with git flow here with the addition of a persistent stage branch. Hence the workflow I described above.
+I looked at the idea of having the stage and master branches independent.   Doing this would allow code common to both stage and prod gets committed to both branches and code specific to one branch is committed to only the relevant branch.  But this went against [git flow](http://nvie.com/posts/a-successful-git-branching-model/) which is used by everyone else in my dev team.   So instead I decided to stick with git flow here with the addition of a persistent stage branch. Hence the workflow I described above.  Another method can be used to separate common code and environment specific code and will be a future post.
 
 ## Top Files ##
 
