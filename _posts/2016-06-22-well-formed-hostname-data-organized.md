@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Saltstack and a well formed hostname keeps your environment data organized
-tags: saltstack devops
+tags: saltstack
 ---
 
 Previously the well formed hostname has been used to
