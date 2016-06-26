@@ -3,13 +3,12 @@ layout: default
 title: tags
 ---
 
-{% capture tags %}
-  {% for tag in site.tags %}
-    {{ tag[0] }}
-  {% endfor %}
-{% endcapture %}
-{% assign sortedtags = tags | upcase | split:' ' | sort %}
 
+<ul class="tags">
+{% assign sortedtags = site.tags | sort %}
 {% for tag in sortedtags %}
-  <li><a href="/tags/{{ tag | downcase }}">{{ tag }} <span>({{ tag.size }})</span></a></li>
+  {% assign t = tag | first %}
+  {% assign posts = tag | last %}
+  <li><a href="/tags/{{t}}">{{ t }} ({{ posts | size }})</a> </li>
 {% endfor %}
+</ul>
