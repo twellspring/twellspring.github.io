@@ -18,7 +18,7 @@ Similar to applications needing app-specific data, using environments require th
 * Test/PROD Logins for external web services
 * Credentials used by web servers to authenticate with application servers
 
-## Environment Files ##
+###  Environment Files ###
 The pillar for a given role or application needs environment specific data like the above and data that is not environment specific  ( app name, install directory, .... ).  I want a way to make it clear what data belongs to what environment.   To do this, lets start with the pillar from a couple of posts ago, but add in some files.
 
 ```
@@ -41,7 +41,7 @@ I have expanded one application and one role to include the default file ( init.
 
 This makes things clear in the filesystem, but how do we get it to work in salt?  For instance west-api-prod-1 would need to include the files apps/api/init.sls and apps/api/prod.sls.  But west-api-stage-1 will only include apps/api/init.sls since apps/api/stage.sls does not exist.   If a staging server tries to include the non-existent apps/api/stage.sls it will result in an error.  There is no ( at least that I can see ) way to specify this by hand ... there has to be a programatic way to look at the environment and include the relevant environment specific file, but only if it exists.  The name for this is **optional include**  and Saltstack has some optional includes functionality, but it is not complete yet ( does not work everywhere), so we need another solution.   Enter Jinja.
 
-## Jinja Optional Include ##
+###  Jinja Optional Include ###
 
 Jinja is the python template language and is available in SaltStack.  Jinja can be used for many things in salt pillars, states and template files.  In this case it can be used to create an **optional_include** macro ( a re-usable piece of code).   I got the idea for this macro from an issue [SaltStack Issues board on github](https://github.com/saltstack/salt/issues) a couple of years ago and would give credit if I could remember where I found it and the issue is long since closed.  Here is the code:
 
@@ -89,7 +89,7 @@ The first line here is SaltStack's version of the [Linux shebang](https://en.wik
 
 would be added to the includes but for west-api-stage-1 there would be no addition as **app/api/stage.sls** does not exist.
 
-## Pillar Merging ##
+###  Pillar Merging ###
 Before leaving this topic I want to briefly delve into pillar merging.  Merging was used before this post, but knowing how it works is important so that there are no surprises when the global and environment specific files are combined. The [SaltStack Pillars documentation](https://docs.saltstack.com/en/latest/topics/pillar/) covers this but is a little confusing.  Lets simplify it: if you include two pillars, the one included last overwrites the previous if there is overlap.   What is overlap?  When both have the same key.
 
 **First Pillar**

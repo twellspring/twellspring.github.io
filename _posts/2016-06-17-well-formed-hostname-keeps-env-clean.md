@@ -13,7 +13,7 @@ I have three salt environments:  test, stage, prod.  My basic salt development c
 To setup environments so the above development cycle can work we need to update the **file roots** and the **top files**.
 
 
-## File Roots ##
+###  File Roots ###
 The file roots are used to define the different environments.  Here is the file roots configuration in its own modular file in /etc/salt/master.d
 
 **/etc/salt/master.d/file_roots.conf**
@@ -43,7 +43,7 @@ The file_roots section tells salt where to find the state files for a given envi
 
 I looked at the idea of having the stage and master branches independent.   Doing this would allow code common to both stage and prod gets committed to both branches and code specific to one branch is committed to only the relevant branch.  But this went against [git flow](http://nvie.com/posts/a-successful-git-branching-model/) which is used by everyone else in my dev team.   So instead I decided to stick with git flow here with the addition of a persistent stage branch. Hence the workflow I described above.  Another method can be used to separate common code and environment specific code and will be a future post.
 
-## Top Files ##
+###  Top Files ###
 
 There are now 3 different top files instead of the one from last post, but the contents of each is still simple.  Before I had figured out what I am describing, there was just one top file and was much more complicated. Frequently when implementing new functionality I had to make changes to the top file.  Migrating those changes from test to stage to prod would mean sometimes a particular section of the top file was different in the staging and prod branches. And since Salt reads all the top files and merges them together it meant frequent conflicts and errors.  This meant I would often have to update the top file in prod to test my changes in test or stage. Having to do this kind of workaround made my development process more complex and so I decided against that method.
 

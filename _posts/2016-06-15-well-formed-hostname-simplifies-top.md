@@ -4,7 +4,7 @@ title: Saltstack and a well formed hostname simplifies your top
 tags: saltstack
 ---
 
-## The Problem ##
+###  The Problem ###
 When I first started out using SaltStack, I setup a role based configuration where each server has one or more roles and those roles contain everything required to setup the server.  There is the **common** role which as you might expect from its name is applied to all server.  Then there will be at least one functional role.  My two most common are php and node.
 
 A problem that quickly surfaced was how to connect a server ( minion ) to the pillars and states it needed.   Using the **top file** is the obvious answer. At its simplest the top file matches by minion ID, which in most instances is the hostname. So assuming my server names include php and node, the following top file works to configure the servers and can be used for both the pillar and the state top file.
@@ -24,7 +24,7 @@ base:
 
 But as I add more roles the top file gets more and more complex.   Right now I have 17 different roles.   So that is 17 different stanzas in the top file for my base environment.  And if I add in multiple environments ( test, stage, prod ) and servers with different functions that use the same node role, the top file is going to get really big and ugly.
 
-## Help from the Well Formed Hostname##
+###  Help from the Well Formed Hostname###
 
 Using custom grains to identify role is proposed by some people, but that adds to the top file ugliness and has security implications.  On a compromised server the custom grains in /etc/salt/grains could be changed resulting in additional pillar data being exposed to the compromiser.  So to me that puts using custom grains on the **no way** list.
 
@@ -39,7 +39,7 @@ Enter the well formed hostname.  Some people enjoy **creative** naming schemes: 
 
 So the naming scheme for this example will be  datacenter-function-environment-number ( example: west-api-prod-1 ).  In this scheme the function will be used to map a server to a role and the corresponding pillars/states.  Function is not the clearest identifier so instead I am going to call it the nameslug.
 
-## Pillar Configuration ##
+###  Pillar Configuration ###
 Lets put this nameslug to use to simplify the pillar top file.  Here is a simplified top file and a parse_name.sls file.
 
 **pillar/top.sls**
@@ -135,7 +135,7 @@ application:
 
 The api server west-api-prod-1 now has both been mapped to the php role and has the application specific data needed to install the correct application.
 
-## State Configuration ##
+###  State Configuration ###
 
 All of the above only gets us the correct pillar.  We need to also get the correct states on this server, and we use the roles pillar to do this.
 
@@ -180,7 +180,7 @@ Each rolls pillar contains both role specific data and then the general roles pi
 
 Based on the above a server named west-api-prod-1 would include the state roles common and api.
 
-## Summary ##
+###  Summary ###
 
 * The pillar top file includes parse_name
 * parse_name.sls extracts the nameslug out of the server name and includes the corresponding nameslugs/xxxx
@@ -189,6 +189,6 @@ Based on the above a server named west-api-prod-1 would include the state roles 
 * role files include a role specific pillar and an entry in the roles pillar
 * state top file includes all roles from the roles pillar via a jinja loop
 
-This structure has worked well for me.  I started out with 2 roles and 3 apps and now with 17 roles and 35 apps it still works.  Instead of a long complex top file, I have a well organized hierarchy with lots of small easy to understand files with well defined content.  
+This structure has worked well for me.  I started out with 2 roles and 3 apps and now with 17 roles and 35 apps it still works.  Instead of a long complex top file, I have a well organized hierarchy with lots of small easy to understand files with well defined content.
 
 So what about the other parts of the **well formed hostname**? Those parts are useful and will be well used, but that is for another post.

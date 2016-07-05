@@ -1,6 +1,6 @@
 ---
 layout: post
-title: SaltStack and the well formed hostname prevents merge chaos
+title: SaltStack and a well formed hostname prevents merge chaos
 tags: saltstack
 ---
 
@@ -21,7 +21,7 @@ include:
 {% endraw %}
 ```
 
-## Pillar Merge Strategy ##
+###  Pillar Merge Strategy ###
 This small addition is not worth an entire blog post.  But it is the gateway introduce the need for a pillar merge strategy. The well formed hostname ( datacenter-function-environment-number ) makes it is possible to have data specific to the each name part and to the whole name:
 
 * datacenter
@@ -41,7 +41,7 @@ There are valid use cases for data specific to each of these, except for number 
 
 These different types of data will be in different files in my pillar filesystem.   These files are then brought together by includes, which per the previous blog means any data overlap will cause the first included item to be overwritten by the second. A well planned merge order is needed so I always know what data the resulting pillar will contain.  Above is my theoretical merge order.  Below is my logic for this order.  Yours might be different, but that is fine as long as you understand the logic and how that affects the final pillar.
 
-## Pillar Merge Logic ##
+###  Pillar Merge Logic ###
 The first one is easy.  By definition defaults should be overwritten by any of the other data types in the list, so it will be merged first.  What is next?   Does datacenter specific data overwrite environment specific data or visa versa?  How about environment vs role?  I started my decision process by thinking about the use case for each category.  Datacenter specific data use case was information required for basic network functionality:
 
 * NTP server
@@ -61,7 +61,7 @@ The use cases for datacenter and environment probably do not have any overlap. B
 
 The merge ordering as I am seeing it is working on decreasing scope, and I like the idea of a merge order based on scope. Datacenter is the largest scope as it can include multiple environments/functions making it next in the list after defaults and overwriting any defaults.  In my thinking environment's scope is smaller than datacenter as each datacenter can have multiple environments, but bigger than role/application/hostname.  So environment is next and will overwrite any overlaps with datacenter.  To continue ordering by scope all the way down means after environment comes role, application, hostname.
 
-## Pillar Merge Code ##
+###  Pillar Merge Code ###
 So now this theoretical merge order needs to turn into code.  Here is the actual merge order that the code will implement:
 
 * defaults
@@ -136,7 +136,7 @@ The pillar data in an sls file is overwritten by any pillars included in that fi
 * apps/api/prod
 * roles/php
 
-## Merge Technical Problem ##
+###  Merge Technical Problem ###
 This is not the same order as my theoretical merge order of decreasing scope which has roles before apps.  But because the nameslug symbolic link points at the application sls file it is not possible to have roles before application.  Replacing the nameslug symlink with a file like this would allow the theoretical order to be kept:
 
 **pillar/nameslug/api.sls**
@@ -152,7 +152,7 @@ include:
 
 But I don't like this because it makes the code more complex as the application is defined partially in the nameslug file and partially in the app file.  And so I decided this minor deviation from scoping was the more acceptable of these two options keeping the code cleaner and the application defined in just one place.  And as long as I have a well defined merge order I will know how the data in my apps and roles will merge.  The practicals of this re-ordering is that roles can not be over-written by an application so all applications have to use the same role functionality.   This does not seem like much of a problem.   And in practice I have not had any difficulty with this ordering.
 
-## Done ##
+###  Done ###
 There is now code to create this merging order:
 
 * defaults
