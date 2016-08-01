@@ -4,9 +4,9 @@ Long Haul is a minimal jekyll theme built with COMPASS / SASS / SUSY and focuses
 
 If you really enjoy Long Haul and want to give me credit somewhere on the send or tweet out your experience with Long Haul and tag me [@brianmaierjr](https://twitter.com/brianmaier).
 
-####[View Demo](http://brianmaierjr.com/long-haul)
+#####[View Demo](http://brianmaierjr.com/long-haul)
 
-## Features
+###  Features
 
 - Minimal, Type Focused Design
 - Built with SASS + COMPASS
@@ -21,7 +21,7 @@ If you really enjoy Long Haul and want to give me credit somewhere on the send o
 - Stylish Drop Cap on posts
 - A Better Type Scale for all devices
 
-## Setup
+###  Setup
 
 1. [Install Jekyll](http://jekyllrb.com)
 2. Fork the [Long Haul repo](http://github.com/brianmaierjr/long-haul)
@@ -32,7 +32,7 @@ If you really enjoy Long Haul and want to give me credit somewhere on the send o
 7. Run `compass watch`
 8. Customize!
 
-## Site Settings
+###  Site Settings
 
 The main settings can be found inside the `_config.yml` file:
 
@@ -44,6 +44,6 @@ The main settings can be found inside the `_config.yml` file:
 - **social** diverse social media usernames (optional)
 - **google_analytics** Google Analytics key (optional)
 
-## License
+###  License
 
 This is [MIT](LICENSE) with no added caveats, so feel free to use this Jekyll theme on your site without linking back to me or using a disclaimer.
