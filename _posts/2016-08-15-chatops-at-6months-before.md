@@ -49,4 +49,4 @@ Based on my interactions with the developers during that time, the typical devel
 * Maybe I don't need to test this feature on a server environment.  An untested hotfix might be easier.
 * It took so much work to get this environment setup as I want it so I am going to hold onto it even if I won't be doing any testing in it for a few weeks.
 
-My next post will show how all of this has changed and the benefits it has provided to the developer and development workflow.
+My [next post](/blog/chatops-at-6months-after/) will show how all of this has changed and the benefits it has provided to the developer and development workflow.
