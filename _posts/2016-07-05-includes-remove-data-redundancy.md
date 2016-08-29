@@ -11,7 +11,7 @@ Last post I created a pillar merge strategy that allowed data at different scope
 
 **apps/www.sls**
 
-```
+```JSON
 apps:
   www:
     envdata:
@@ -22,7 +22,7 @@ apps:
 
 **apps/customer_app.sls**
 
-```
+```JSON
 apps:
   cutomer_app:
     envdata:
@@ -40,7 +40,7 @@ Since sls file included via SaltStack needs to have the full pillar definition (
 
 First I thought of putting common data in a common location out of the application pillar ( say services:web_service1 ), but my states are designed to use the apps:appname pillar for all their configuration and having to get data from multiple locations makes states much harder to write and maintain.  Expanding on this idea, how about moving the data and then having a pointer.  Something like this:
 
-```
+```Json
 include:
   - services
   - apps/customer_app
@@ -48,7 +48,7 @@ include:
 
 **services/init.sls**
 
-```
+```Json
 services:
   web_service1:
    url:
@@ -57,7 +57,7 @@ services:
 ```
 **apps/customer_app.sls**
 
-```
+```Json
 apps:
   cutomer_app:
     envdata:
@@ -69,7 +69,7 @@ Maybe a little better theoretically since the apps pillar can be used to get or 
 **apps/www/init.sls**
 
 {% raw %}
-```
+```Json
 #!jinja|yaml|gpg
 
 apps:
@@ -80,7 +80,7 @@ apps:
 
 **apps/customer_app/init.sls**
 
-```
+```Json
 #!jinja|yaml|gpg
 
 apps:
@@ -91,7 +91,7 @@ apps:
 
 **services/web_service1.sls**
 
-```
+```Json
       web_service1_url:
       web_service1_login:
       web_service1_password:

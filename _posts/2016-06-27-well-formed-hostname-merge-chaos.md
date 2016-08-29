@@ -11,7 +11,7 @@ The pillar merge used in the last post allowed us to have global data and enviro
 
 **pillar/parse_name.sls**
 
-```
+```yaml
 {% raw %}
 {%- set name_parts = {} %}
 {%- set namesplit   = grains['id'].split('-') %}
@@ -80,7 +80,7 @@ The include_optional code provided environment specific data within a particular
 
 **pillar/top.sls**
 
-```
+```yaml
 base:
     '*-*-prod-*':
         - parse_name
@@ -91,7 +91,7 @@ The only change from before in the top is to remove the roles/common.  It was mo
 **pillar/parse_name.sls**
 
 {% raw %}
-```
+```yaml
 #!jinja|yaml
 {%- from "macros.jinja" import include_optional with context %}
 
@@ -118,7 +118,7 @@ The jinja now pulls out datacenter and env which are used in the new include lin
 **pillar/apps/api/init.sls**
 
 {% raw %}
-```
+```yaml
 #!jinja|yaml
 {%- from "macros.jinja" import include_optional with context %}
 
@@ -145,7 +145,7 @@ This is not the same order as my theoretical merge order of decreasing scope whi
 **pillar/nameslug/api.sls**
 
 {% raw %}
-```
+```yaml
 include:
   - roles/php
   - apps/api

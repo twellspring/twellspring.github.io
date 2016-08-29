@@ -25,7 +25,7 @@ Similar to applications needing app-specific data, using environments require th
 ###  Environment Files ###
 The pillar for a given role or application needs environment specific data like the above and data that is not environment specific  ( app name, install directory, .... ).  I want a way to make it clear what data belongs to what environment.   To do this, lets start with the pillar from a couple of posts ago, but add in some files.
 
-```
+```yaml
 apps
   api
     init.sls
@@ -52,7 +52,7 @@ Jinja is the python template language and is available in SaltStack.  Jinja can 
 **pillar/macro.jinja**
 
 {% raw %}
-```
+```yaml
 {%- macro include_optional(sls_file) %}
   {%- for root in opts['pillar_roots'][saltenv] -%}
     {%- if salt['file.file_exists']('{0}/{1}.sls'.format(root, sls_file )  %}
@@ -70,7 +70,7 @@ A macro is used by importing it and then referencing it in the sls file.   Here 
 **pillar/apps/api/init.sls**
 
 {% raw %}
-```
+```yaml
 #!jinja|yaml
 {%- from "macros.jinja" import include_optional with context %}
 
@@ -87,7 +87,7 @@ application:
 
 The first line here is SaltStack's version of the [Linux shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)).  This line tells Salt which interpreters to run and in which order.  Jinja runs first so it processes the include_optional before the yaml (which also performs the **include** logic). For west-api-prod-1 the line
 
-```
+```yaml
   - app/api/prod
 ```
 
@@ -98,7 +98,7 @@ Before leaving this topic I want to briefly delve into pillar merging.  Merging 
 
 **First Pillar**
 
-```
+```yaml
 application:
   name: api
   monitoring: false
@@ -109,7 +109,7 @@ application:
 
 **Second Pillar**
 
-```
+```yaml
 application:
   monitoring: true
   ssl: enabled
@@ -119,7 +119,7 @@ application:
 
 **Merged Pillar**
 
-```
+```yaml
 application:
   name: api
   monitoring: true

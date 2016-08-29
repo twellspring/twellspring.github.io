@@ -21,7 +21,7 @@ And so to integrate Hubot with my salt-api was a standard CoffeeScript http call
 Here is some boilerplate code for getting information about a server from salt-api
 ( if needed, scroll left/right in text box to see full lines)
 
-```
+```Coffeescript
 robot.respond /Get information about server *([\w-_]+)/i, (msg) ->
   serverName = msg.match[1]
   httpURL = "#{saltUrl}/server/#{serverName}"
@@ -41,7 +41,7 @@ robot.respond /Get information about server *([\w-_]+)/i, (msg) ->
 
 Though this code is specific to the internal salt-api, the same methodology works for accessing Saltstack API.  And doing POST/PUT requests just requires changing the method and passing the appropriate body.
 
-```
+```Coffeescript
 robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (msg) ->
   appName     = msg.match[1]
   serverName  = msg.match[2]
@@ -76,7 +76,7 @@ For my initial ChatOps deploy the MVP is
 
 For the longer requests like deploy I decided to add in a msg.send line before the msg.http.  This gives immediate feedback to the user so they know that Hubot is on the job.  Something like:
 
-```
+```Coffeescript
 msg.send "Deploying #{version} to #{server}. \nIf this takes a few minutes, it is probably due to a slow `npm install`."
 ```
 

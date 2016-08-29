@@ -17,14 +17,13 @@ The security put in place last time was not enough for me.   While it provides t
 The [hubot-auth module](https://github.com/hubot-scripts/hubot-auth) will provide us the ability to make these groups and as many more as we may need.  First lets install it.
 Add hubot-auth to your package.json file:
 
-```
+```TEXT
 npm install --save hubot-auth
-
 ```
 
 and then add hubot-auth to external-scripts.json:
 
-```
+```JSON
 [
   "hubot-help",
   "hubot-pugme",
@@ -37,7 +36,7 @@ and then add hubot-auth to external-scripts.json:
 
 There are now several new commands:
 
-```
+```TEXT
 ! <user> doesn't have <role> role - Removes a role from a user
 ! <user> has <role> role - Assigns a role to a user
 ! what roles do I have - Find out what roles you have
@@ -47,7 +46,7 @@ There are now several new commands:
 
 This module uses the slack user IDs for authentication.  To add a slack user to a group use their ID ( what you see after the @ in a mention in a room).   In the below mythical example these IDs are **firstlast**.  Here the developers and qa staff are added to roles.
 
-```
+```TEXT
 ! malreynold has developer role
 Hubot: @rivertam: OK, malreynold has the 'developer' role.
 ! zoewashburne has developer role
@@ -61,7 +60,7 @@ Hubot: @rivertam: OK, shepherdbook has the 'qa' role.
 
 Now to restrict commands/modules using these new user roles.  The method I decided to use was to create a restrictCommand global function which can be called from each module that needs to be restricted.
 
-```
+```coffeescript
 restrictCommand: (msg,allowedRoles) ->
   return false if robot.auth.isAdmin(msg.envelope.user)
   for allowedRole in allowedRoles
@@ -84,7 +83,7 @@ It starts with allowing admins ( they are Gods after all so can use all modules 
 
 Now the lines that go at the top of a module/command to call the above function.
 
-```
+```coffeescript
 robot.respond /list (apps|applications) on (server)? *([\w-_]+)/i, (msg) ->
   allowedRoles = ["developer","qa"]
   return if robot.myCompany.restrictCommand(msg, allowedRoles )
@@ -95,6 +94,6 @@ The allowedRoles list is passed to restrictCommand.  If it returns a true then a
 
 Audit Note:  if this same pattern is used on all modules, a grep can be used to easily audit all of robot.respond command restrictions. From the hubot root directory run this command to return a list of robot.respond lines followed by the allowedRoles.
 
-```
+```BASH
 grep -A 1 -R robot.respond scripts/*
 ```

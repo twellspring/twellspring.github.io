@@ -21,7 +21,7 @@ The file roots are used to define the different environments.  Here is the file 
 
 **/etc/salt/master.d/file_roots.conf**
 
-```
+```yaml
 fileserver_backend:
   - roots
 
@@ -54,7 +54,7 @@ Keeping an individual top file for each environment is simple to understand and 
 
 **pillar/ and state/ for the TEST environment**
 
-```
+```TEXT
 top.sls.prod
 top.sls.stage
 top.sls.test
@@ -63,7 +63,7 @@ top.sls --> top.sls.test
 
 **pillar/ and state/ for the STAGE environment**
 
-```
+```TEXT
 top.sls.prod
 top.sls.stage
 top.sls.test
@@ -72,7 +72,7 @@ top.sls --> top.sls.stage
 
 **pillar/ and state/ for the PROD environment**
 
-```
+```TEXT
 top.sls.prod
 top.sls.stage
 top.sls.test
@@ -84,7 +84,7 @@ And the top files looks like this.
 
 **pillar/top.sls for the TEST**
 
-```
+```yaml
 test:
     '*-*-test-*':
         - roles/common
@@ -93,7 +93,7 @@ test:
 
 **pillar/top.sls for the STAGE**
 
-```
+```yaml
 stage:
     '*-*-stage-*':
         - roles/common
@@ -102,7 +102,7 @@ stage:
 
 **pillar/top.sls for the PROD**
 
-```
+```yaml
 base:
     '*-*-prod-*':
         - roles/common

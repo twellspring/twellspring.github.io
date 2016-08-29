@@ -11,7 +11,7 @@ My pondering on how to clearly log Hubot initiated saltstack changes to a Slack 
 
 So with robot.messageRoom I can add a CC after the msg.reply lines in the examples from my previous post.
 
-```
+```Coffeescript
 ccChannel = "some_channel"
 if jsonBody.result != "failure"
   msg.reply "Successfully deployed #{appName} to #{serverName}"
@@ -29,7 +29,7 @@ Now when someone runs the deploy command via DM, in my channel that tracks stagi
 which shows the change made and who made it.   That's just what we need, and I would have left it at this if I did not accidentally run a deploy command in the same channel as is defined for the cc.  And you guessed it ... duplicate messages.   That's not going to work.   And likewise I do not want to see duplicate messages when I am testing new commands locally via the Hubot command line.   So we now need to turn this into a function that has the logic necessary to suppress duplicates and can be called from multiple locations.  Creating a local function is my first try and I got that working without too much frustration and head-banging.  I decided to stick with "room" in my code as that is the generic term Hubot uses which in Slack's case maps to a channel.
 
 
-```
+```Coffeescript
 module.exports = (robot) ->
 
   ccRoom = "some_channel"
@@ -46,7 +46,7 @@ module.exports = (robot) ->
 
 A couple of CoffeeScript notes here.   The CoffeeScript **return** call will exit the function without processing any more lines.  And the pattern "command if test" means those means those lines only get executed if the condition statement evaluates to true.  I like what I did above as the code is cleaner and more readable than a typical compound if-then-else
 
-```
+```Coffeescript
 if ccRoom == room
   return
 else
@@ -58,7 +58,7 @@ else
 
 or using an **or** in the if statement.
 
-```
+```Coffeescript
 if ccRoom == room or user == "Shell"
   return
 else
@@ -67,7 +67,7 @@ else
 
 Notes done ... back to the originally scheduled subject.   Using this new function requires replacing each robot.messageRoom line with a cc line.
 
-```
+```Coffeescript
   cc(msg, ccRoom, "Successfully deployed #{appName} to #{serverName}")
 ```
 

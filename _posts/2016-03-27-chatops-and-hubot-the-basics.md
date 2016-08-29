@@ -50,7 +50,7 @@ Something that I found missing from hubot was the ability to use .env files like
 
 With it, my .env now has three variables
 
-```
+```TEXT
 HUBOT_SLACK_TOKEN=xoxb-XXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXX
 HUBOT_AUTH_ADMIN=1
 HUBOT_SALT_AUTH=XXXXXXXXXXXXXXXXXX
