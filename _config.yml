@@ -50,6 +50,9 @@ gems:
     - jekyll-gist
     - jekyll-paginate
 
+# Set Width of page
+# max-width of the blog page can be set in foundation-components/_grid.scss in the line
+# $row-width: rem-calc(1240) !default; 
 
 #       ____              _             __  _
 #      / __ \____ _____ _(_)___  ____ _/ /_(_)___  ____
