@@ -2,14 +2,18 @@
   url: "/"
   side: right
 
-- title: "SEARCH"
-  url: "/search/"
-  side: right
-
 - title: "ABOUT"
   url: "/about/"
   side: right
 
+- title: "WHY"
+  url: "/why/"
+  side: right
+
+- title: "SEARCH"
+  url: "/search/"
+  side: right
+  
 - title: "CONTACT"
   url: "/contact/"
   side: right

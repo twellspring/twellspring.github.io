@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: SaltStack and a well formed hostname prevents merge chaos
 teaser: "The pillar merge used in the last post allowed us to have global data and environment specific data.   Now I want to add in another: datacenter specific data."
 tags: saltstack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 The pillar merge used in the last post allowed us to have global data and environment specific data.   Now I want to add in another: datacenter specific data.   Adding a pilar merge for datacenter is not difficult requiring just two additional lines in the parse_name.sls.

@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Saltstack and a well formed hostname simplifies your top
 teaser: "When I first started out using SaltStack, I setup a role based configuration where each server has one or more roles and those roles contain everything required to setup the server.  There is the **common** role which as you might expect from its name is applied to all server."
 tags: saltstack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 ###  The Problem ###

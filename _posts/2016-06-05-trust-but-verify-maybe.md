@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Trust but verify? Maybe, but better to not trust and sanitize
 teaser: "It would be nice if the old Regan slogan, which is an even older Russian proverb, was sufficient for our chatops security mantra.  I would like to be able to always trust the system's users, especially because chatops users are trusted employees."
 tags: hubot chatops security
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 It would be nice if the old Regan slogan, which is an even older Russian proverb, was sufficient for our chatops security mantra.  I would like to be able to always trust the system's users, especially because chatops users are "trusted" employees.  And in most cases they are the developers I work with and along side daily.   But alas, I don't think I can leave it at that.  There are too many instances in the news of fraud and data breaches being perpetrated by an insider i.e. a trusted employee.   I want to empower the developers I work with, but I don't want to see my chatops implementation becomes an open attack vector used to perpetrate data theft.    Instead I am going to not trust and sanitize.

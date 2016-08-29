@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Chatops and Hubot the basics
 teaser: "Hubot was really not hard get started with. I started with it on my MacOS laptop. I already had these dependencies installed: node.js 5.x, npm, git.  So what was left from the hubot installation instructions"
 tags: hubot chatops slack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 Hubot was really not hard get started with.   I started with it on my MacOS laptop.   I already had these dependencies installed
 

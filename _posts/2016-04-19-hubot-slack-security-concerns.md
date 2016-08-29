@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Hubot and Slack Security concerns
 teaser: "The last post used middleware to restrict what room commands can run it.  But there is still no restrictions on who can use a command and what server they can run it on."
 tags: hubot chatops slack security
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 The last post used middleware to restrict what room commands can run it.  But there is still no restrictions on who can use a command and what server they can run it on.   It does not take my 10 years of work at financial companies and countless audits to know that this level of open access is not a good idea.   So before Hubot gets implemented I want to have a minimal level of security.   Remember I am going for MVP here, not what I think will be the end all security design a year from now.   Walk before running.

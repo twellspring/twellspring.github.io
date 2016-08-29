@@ -1,20 +1,35 @@
 <aside>
 	<div class="panel radius">
-		<h3>Sidebar</h3>
+		<h3>About</h3>
 		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
-			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			I am a techie who likes hiking and backpacking as a hobby and to keep me grounded while working in the Cloud, hence my slogan.  I have a long term unrealized goal of automating and training myself out of a job.
+			 <br><a href="/about"><strong>{{ site.data.language.read_more }}</strong></a>
 		</p>
 	</div>
 
-  <img class="b30" src="http://dummyimage.com/303x16:9/df4949/e27b3f.png&amp;text=Ugly+Ad+Space" alt="">
-
-
-	<div class="border-dotted radius b30">
-		<img src="http://placekitten.com/271/270" alt="uh, Placekitten">
-		<p class="text-left">
-			This is an advertisment with a crazy cat! <a href="http://placekitten.com/">More cats, please!</a>
+	<div class="panel radius">
+		<h3>Recent Posts</h3>
+		<p>
+			{% include list-posts entries='4' offset='0' %}
 		</p>
 	</div>
+
+	<div class="panel radius">
+		<h3>Tags</h3>
+		<ul>
+			{% for tag in site.tags %}
+	    <li><a href="/blog/tags/#{{ tag[0] | slugify }}" class="post-tag">{{ tag[0] }}</a></li>
+	    {% endfor %}
+		</ul>
+	</div>
+
+	<div class="panel radius">
+		<h3>Archives</h3>
+		<p>
+			<a href="/blog/archive/"><strong>Older Blog Posts</strong></a>
+		</p>
+	</div>
+
+
+
 </aside>

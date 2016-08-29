@@ -1,21 +1,21 @@
-- menu_name: "Dankeschön"
+- menu_name: "Thanks to"
 
-- name: "Icons by Daniel Bruce"
-  url: "http://entypo.com/"
-  class: "network-entypo"
-  title: "Icons by Daniel Bruce"
-
-- name: "Built on Foundation"
-  url: "http://foundation.zurb.com/"
-  class: "services-newsletter"
-  title: "Built on Foundation"
-
-- name: "Images by Unsplash"
-  url: "http://unsplash.com/"
-  class: "rss-link"
-  title: "Images by Unsplash"
-
-- name: "Using Backstretch by Scott Robbin"
-  url: "http://srobbin.com/jquery-plugins/backstretch/"
+- name: "Feeiling-responsive theme"
+  url: "http://phlow.github.io/feeling-responsive/"
   class: "sitemap-link"
-  title: "Using Backstretch by Scott Robbin"
+  title: "Feeling-responsive theme"
+
+- name: "Jekyll, blog-aware static site generator"
+  url: "http://jekyllrb.com"
+  class: "sitemap-link"
+  title: "Jekyll, blog-aware static site generator"
+
+- name: "Hosted on github"
+  url: "https://github.com"
+  class: "sitemap-link"
+  title: "Hosted on github"
+
+- name: "Riskalyze, my day job where I do this before I write about it"
+  url: "https://www.riskalyze.com"
+  class: "sitemap-link"
+  title: "My day job where I do all this before I write about it"

@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Security, Security, More Security
 teaser: "The security put in place last time was not enough for me.   While it provides that no one can affect production servers except those in the hard-coded Hubot admin group, I don't like that anyone who has a slack account can affect the test environment."
 tags: hubot chatops slack security
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 The security put in place last time was not enough for me.   While it provides that no one can affect production servers except those in the hard-coded Hubot admin group, I don't like that anyone who has a slack account can affect the test environment that our developers rely on.    So we need user groups with different levels of access.   I think 3 will do for demonstrating group access:

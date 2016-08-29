@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Saltstack expanding includes to remove data redundancy
 teaser: "Last post I created a pillar merge strategy that allowed data at different scopes and include it on all the servers relevant to that scope. After implementing this strategy and using it for a while I started having the needing for the same data in multiple different pillars."
 tags: saltstack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 Last post I created a pillar merge strategy that allowed data at different scopes and include it on all the servers relevant to that scope. After implementing this strategy and using it for a while I started having the needing for the same data in multiple different pillars. Here are example pillars for two applications that need the same credentials for a web services like [segment.com](https://segment.com).

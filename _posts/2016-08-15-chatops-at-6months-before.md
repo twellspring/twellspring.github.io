@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Chatops at 6 months. How has it changed development. Before
 teaser: "Yesterday one of my developers created a server environment to test a feature branch and had a problem: one of the 4 servers in the environment did not get built. A short investigation showed a typo on the ChatOps command was the cause. "
-tags: hubot chatops slack
+tags: hubot chatops devops
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 Yesterday one of my developers created a server environment to test a feature branch and had a problem: one of the 4 servers in the environment did not get built. A short investigation showed a typo on the ChatOps command was the cause. When I explained what happened and suggested building just that one server the developer replied "I will just terminate the environment and recreate it." Terminating and recreating servers is a normal/reasonable option for a situation like this, but for some reason that statement stuck in the back of my mind. A day later I realized why: it was said so casually. To the developer accomplishing what he said was easy. One Slack command would terminate the 3 servers and another command would build the 4 servers again. Why mess around with fixing a development environment that did not get built correctly the first time when you can create it again with 2 Slack commands.

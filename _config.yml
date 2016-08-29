@@ -14,10 +14,10 @@ title: 'Todd Wells'
 slogan: 'Techie type with his feet in the mountains and his head in the Cloud.'
 
 # The description is used on homepage and in the footer to quickly describe your website. Use a maximum of 150 characters for SEO-purposes.
-description: 'DevOps blog about the cloud.  Special focus on ChatOps and SaltStack.'
+description: 'Blog about DevOps in the Cloud.  Special focus on ChatOps and SaltStack.'
 
 # The credits show up in the includes/_footer.html – It would be nice of you to leave a link to Phlow or Feeling Responsive as a thank you :)
-credits: '<p>Created with &hearts; by <a href="http://phlow.de/">Phlow</a> with <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> based on <a href="http://phlow.github.io/feeling-responsive/">Feeling Responsive</a>.</p>'
+#credits: '<p>Created with &hearts; by <a href="http://phlow.de/">Phlow</a> with <a href="http://jekyllrb.com/" target="_blank">Jekyll</a> based on <a href="http://phlow.github.io/feeling-responsive/">Feeling Responsive</a>.</p>'
 
 # Main author of the website
 # See > authors.yml
@@ -30,7 +30,7 @@ baseurl: ''
 
 # This is for the editing function in _/includes/improve_content
 # Leave it empty if your site is not on GitHub/GitHub Pages
-improve_content: https://github.com/Phlow/feeling-responsive/edit/gh-pages
+#improve_content: https://github.com/Phlow/feeling-responsive/edit/gh-pages
 
 # This URL points directly to the images directory making
 # things easier to link to images in posts and templates. It needs a slash at the end.
@@ -58,9 +58,9 @@ gems:
 #   /_/    \__,_/\__, /_/_/ /_/\__,_/\__/_/\____/_/ /_/
 #               /____/
 #
-paginate: 5                      # Paginates all X entries
-paginate_path: "blog/page:num"   # Pagination path › Important for blog page in /blog/ to work
-
+#paginate: 5                       # Paginates all X entries
+#paginate_path: "blog/page:num"   # Pagination path › Important for blog page in /blog/ to work
+paginate_path: "blog/page:num"
 
 # Theme works best with Kramdown (using the table of contents function)
 markdown: kramdown
@@ -72,7 +72,7 @@ kramdown:
 #  syntax_highlighter: nil
 
 permalink: /blog/:title/
-highlight: rouge
+#highlight: rouge
 excerpt_separator: "<!--more-->"
 include: ['.htaccess']
 # Exclude these files from your production _site
@@ -115,7 +115,7 @@ defaults:
       path: '' 				# an empty string here means all files in the project
       type: 'pages'
     values:
-      show_meta: false 	# Hide metadata for all pages
+      show_meta: True 	# Hide metadata for all pages
       sidebar: right
       comments: false
       author: twells     # Default author for pages
@@ -149,9 +149,9 @@ defaults:
 #   ___/ / /___/ /_/ /
 #  /____/_____/\____/    Verify Website to Webmaster Tools
 
-google_author:             'https://plus.google.com/u/0/118311555303973066167'
-google_site_verification:  'Vk0IOJ2jwG_qEoG7fuEXYqv0m2rLa8P778Fi_GrsgEQ'
-bing_webmastertools_id:    '0FB4C028ABCF07C908C54386ABD2D97F'
+#google_author:             'https://plus.google.com/u/0/118311555303973066167'
+#google_site_verification:  'Vk0IOJ2jwG_qEoG7fuEXYqv0m2rLa8P778Fi_GrsgEQ'
+#bing_webmastertools_id:    '0FB4C028ABCF07C908C54386ABD2D97F'
 # alexa_verify_id:         ''
 
 
@@ -197,9 +197,9 @@ og_type:                            'website'
 #  Open _data/socialmedia.yml to adjust the left and right topbar navigation
 #
 
-socialmedia:
-    twitter: phlow
-    facebook: phlow.media
+#socialmedia:
+#    twitter: twellspring
+#    facebook: phlow.media
 
 
 #        ____  _
@@ -211,7 +211,7 @@ socialmedia:
 #
 # used in _includes/comments
 
-disqus_shortname: feelingresponsive
+disqus_shortname: twells
 
 
 #      _____
@@ -235,7 +235,7 @@ sass:
 #
 # used in _includes/footer_scripts
 
-google_analytics_tracking_id: UA-60112281-1
+#google_analytics_tracking_id: UA-60112281-1
 
 
 
@@ -252,7 +252,7 @@ google_analytics_tracking_id: UA-60112281-1
 #
 # used in _includes/footer_scripts
 
-# tawkto_embed_uri:
+#tawkto_embed_uri: 'https://embed.tawk.to/57c37b530e2ec4134ce2e6fa/default'
 
 
 #     ___              _     __           __

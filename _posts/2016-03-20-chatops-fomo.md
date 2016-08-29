@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: ChatOps FOMO
 teaser: "A month ago I discovered the term **ChatOps** and was a little surprised it has been around for over 3 years. Guess I have missed out, but not any more. Time to get me some ChatOps"
 tags: hubot chatops
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 A month ago I “discovered” the term **ChatOps** and was a little surprised it has been around for over 3 years. Guess I have missed out, but not any more. Time to get me some ChatOps. But first, thanks to the [githubbers](https://speakerdeck.com/jnewland/chatops) who came up with this idea.

@@ -1,9 +1,11 @@
 ---
-layout: post
+layout: page
 title: Saltstack and a well formed hostname keeps your environment data organized
 teaser: "Previously the well formed hostname has been used to: 1) map servers to roles
 2) map application servers sharing roles to the appropriate role and to the application specific data needed to customize each server 3) map servers to salt environments"
 tags: saltstack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 Previously the well formed hostname has been used to

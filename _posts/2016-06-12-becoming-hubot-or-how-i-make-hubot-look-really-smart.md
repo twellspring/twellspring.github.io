@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Becoming Hubot or How I make Hubot look really smart
 teaser: "When my teammates talk to me about problems with Hubot I learn about what is and is not working well, which often leads to code updates to make Hubot easier to user. Recently my conversations are indicating teammates are having difficulty with getting the hubot syntax correct."
 tags: hubot chatops slack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 When my teammates talk to me about problems with Hubot I learn about what is and is not working well, which often leads to code updates to make Hubot easier to user. Recently my conversations are indicating teammates are having difficulty with getting the hubot syntax correct.  They know about the help command, but they are not able to interpret it.   This is particularly true for those with little command line experience.

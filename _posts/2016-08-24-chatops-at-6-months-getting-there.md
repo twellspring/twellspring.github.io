@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title: Chatops at 6 months. How has it changed development. Getting There
 teaser: "Using ChatOps to move from Ops-Serve to Self-Serve obviously took some technical work.  But as stated before I am focusing on the developer in this series, so I want to look at what it took to transition the development team to using this new tool."
-
-tags: hubot chatops slack saltstack
+tags: hubot chatops slack devops
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 Using ChatOps to move from Ops-Serve to Self-Serve obviously took some technical work.  But as stated before I am focusing on the developer in this series, so I want to look at what it took to transition the development team to using this new tool.

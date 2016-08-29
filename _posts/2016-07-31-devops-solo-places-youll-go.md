@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: DevOps Solo. Oh, The places you'll go
 teaser: "It was unexpected and a little ironic that the quote I found that best sums up my DevOps experience is from Dr. Seuss."
-tags: DevOps
+tags: devops
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 **&nbsp;&nbsp;&nbsp;&nbsp;You have brains in your head. You have feet in your shoes.<br>**

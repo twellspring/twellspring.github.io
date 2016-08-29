@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Pencils and Pens will be Illegal
 teaser: "As a citizen of the United States of America and a technology worker I am of course interested in Dianne Feinstein and Richard Burr's recent bill **Compliance with Court Orders Act of 2016**, particularly since Dianne Feinstein is my Congresswoman.  While I appreciate the efforts of our Government to protect citizens, I am concerned what affect this bill will have on the US."
 tags: politics security
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 As a citizen of the United States of America and a technology worker I am of course interested in Dianne Feinstein and Richard Burr's recent bill "Compliance with Court Orders Act of 2016", particularly since Dianne Feinstein is my Congresswoman.  While I appreciate the efforts of our Government to protect citizens, I am concerned what affect this bill will have on the US.   The first of my fears is on someone who might be overlooked in the debate: the makers of pencils and pens.  Here is the definition of who is covered:

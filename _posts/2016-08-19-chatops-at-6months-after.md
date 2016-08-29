@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Chatops at 6 months. How has it changed development. After
 teaser: "In my last post I looked at where the development process was before ChatOps was discovered and implemented. My how things have changed in these six months.  Developers can do a lot more now."
-tags: hubot chatops slack saltstack
+tags: hubot chatops devops
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 In my [last post](/blog/chatops-at-6months-before/) I looked at where the development process was before ChatOps was discovered and implemented. My how things have changed in these six months.  Developers can do a lot more now.

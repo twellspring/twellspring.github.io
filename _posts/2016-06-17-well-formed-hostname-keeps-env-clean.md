@@ -1,8 +1,10 @@
 ---
-layout: post
+layout: page
 title: Saltstack and a well formed hostname keeps environments clean
 teaser: "The well formed hostname in my last post helped connect servers to the appropriate pillars/roles while keeping the top file simple.  One part of the well formed hostname used, three to go."
 tags: saltstack
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 The well formed hostname in my last post helped connect servers to the appropriate pillars/roles while keeping the top file simple.  One part of the well formed hostname used, three to go.  Another foundational piece of a salt ecosystem is environments, and we can use another name part to facilitate environments.
