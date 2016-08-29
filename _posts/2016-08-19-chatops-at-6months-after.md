@@ -49,7 +49,7 @@ I say **getting close to** because thinking and habits don't always change quick
 #### "Can Not" Notes ####
 **Troubleshoot why a particular server build failed** is was initially hard for a developer as ChatOps would return all the SaltStack failed states. This meant a simple error like incorrect branch would return 50+ lines of SaltStack JSON output due to all the states that failed because they were dependent on the git state. Filtering out these dependent failures cut out the noise.  Now a developer can pretty easily interpret the most common failure, typo in the branch to deploy, without understanding SaltStack or even knowing that the error message comes from SaltStack.  Here is an example:
 
-```YAML
+```yaml
 {
   "git_|-xxxxxxx-repo_xxxxxxxxx_|-git@github.com:xxxxxxxx/xxxxxxxx.git_|-latest": {
     "comment": "No revision matching 'hotfix/x.xx.xx' exists in the remote repository",

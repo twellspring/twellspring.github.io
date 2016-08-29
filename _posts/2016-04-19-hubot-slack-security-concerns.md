@@ -16,14 +16,14 @@ The minimum I see is:
 
 Fortunately all my servers have well defined names and the environment of a server can be easily parsed out of the name
 
-```Coffeescript
+```javascript
 server_split = server_name.split "-"
 server_env = server_split[3]
 ```
 
 Now I just need put a check at the top of the deploy command that will check the above server_env.   I created a global function to validate the above two conditions are met:
 
-```Coffeescript
+```javascript
 module.exports = (robot) ->
 
   class myCompany
@@ -43,7 +43,7 @@ The two lines starting with **return false** are my conditions.   If either of t
 
 Now at the top of my deploy command ( and any other command that needs this security)  I put in a check
 
-```Coffeescript
+```javascript
 robot.respond /deploy ([\w-]+) to ([\w-]+) version ([\w-_/\.]+)?([\w-_]+)?/i, (msg) ->
   appName     = msg.match[1]
   serverName  = msg.match[2]

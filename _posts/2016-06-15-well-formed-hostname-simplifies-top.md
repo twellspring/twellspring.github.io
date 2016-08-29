@@ -69,7 +69,7 @@ include:
 
 The top file includes parse_name which extracts the nameslug out of the ID/hostname and then includes a file in the nameslugs directory.  (nameslugs directory ... guess we need to create that.)   Each server type will have a corresponding "file" in the nameslugs directory.   While I could use actual sls files here, I found that using symbolic links in the nameslugs directory allowed it to be a more flexible mapping rather than holding content.  Where does it map to?  that depends on the server function.   Here is a simple pillar hierarchy
 
-```text
+```
 pillar
   nameslugs
   roles
@@ -80,7 +80,7 @@ pillar
 
 For a VPN server we would create a nameslug that maps to the vpn role.
 
-```text
+```
 cd nameslugs
 ln -s ../roles/vpn vpn
 ```
@@ -102,7 +102,7 @@ vpn:
 
 If I name a vpn server west-vpn-prod-1 it will be mapped to the correct role/pillars/states.  Goal accomplished for this one.  But if we have both a web server ( west-www-prod-1 ) and an api server ( west-api-prod-1 ) that need the PHP role we can not map directly between the nameslug and a role as there needs to be a way to differentiate the servers ( install the correct application ).  I will create a new **apps** directory to help resolve this.
 
-```text
+```
 pillar
   apps
     api
@@ -116,7 +116,7 @@ pillar
 
 Now the nameslugs for api and www map to the corresponding apps;
 
-```text
+```
 cd nameslugs
 ln -s ../apps/api api
 ln -s ../apps/www www

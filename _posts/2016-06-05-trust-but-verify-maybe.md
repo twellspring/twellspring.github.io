@@ -13,7 +13,7 @@ Sanitizing data is common practice.  Any data that comes in from a user needs to
 
 Data comes in to our chatops system via our **robot.respond** and **robot.hear** statements. Here is possibly the most used command in chatops
 
-```coffeescript
+```javascript
 robot.respond /pug me/i, (msg) ->
 ```
 
@@ -21,7 +21,7 @@ Nothing hard here ... if the phrase "**hubot pug me**" is sent to chatops it ret
 
 To continue the pug me example, lets look at the **pug bomb** command ( slightly altered to help illustrate the point).
 
-```coffeescript
+```javascript
 robot.respond /pug bomb( (.*))?/i, (msg) ->
   count = msg.match[2] || 5
   msg.http("http://pugme.herokuapp.com/bomb?count=" + count)
@@ -31,7 +31,7 @@ This command allows the user to pass a number and that number is added to a URL.
 
 The robot.respond ( and robot.listen ) lines are javascript regular expressions.  Take a look at w3schools.com  [Javascript Regular Expressions](http://www.w3schools.com/jsref/jsref_obj_regexp.asp) to see the options and to test out regular expressions.  In place of the **.*** we can use **\d** to match only digits.  This gives us the code as it actually exists in the hubot-pugme module.
 
-```coffeescript
+```javascript
 robot.respond /pug bomb( (\d+))?/i, (msg) ->
   count = msg.match[2] || 5
   msg.http("http://pugme.herokuapp.com/bomb?count=" + count)
@@ -41,7 +41,7 @@ This data is sanitized because the (\d) pattern match will only allow digits.  A
 
 A little more practical example is matching a server name.  Server names per the DNS spec can only contain letters, numbers and the - symbol.  Here is a command to do that.
 
-```coffeescript
+```javascript
 robot.respond /list (apps|applications) on server ([\w-]+)/i, (msg) ->
 ```
 

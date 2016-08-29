@@ -54,7 +54,7 @@ Keeping an individual top file for each environment is simple to understand and 
 
 **pillar/ and state/ for the TEST environment**
 
-```TEXT
+```
 top.sls.prod
 top.sls.stage
 top.sls.test
@@ -63,7 +63,7 @@ top.sls --> top.sls.test
 
 **pillar/ and state/ for the STAGE environment**
 
-```TEXT
+```
 top.sls.prod
 top.sls.stage
 top.sls.test
@@ -72,7 +72,7 @@ top.sls --> top.sls.stage
 
 **pillar/ and state/ for the PROD environment**
 
-```TEXT
+```
 top.sls.prod
 top.sls.stage
 top.sls.test

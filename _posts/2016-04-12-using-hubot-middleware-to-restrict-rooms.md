@@ -13,7 +13,7 @@ Today's post is a small diversion from the security topic I planned because some
 
 Time for a new file `middleware.coffee`
 
-```Coffeescript
+```javascript
 # Description:
 #   Middleware Commands
 #
@@ -36,7 +36,7 @@ The receiveMiddleware acts after the listener ( robot.respond, ... ) matches but
 
 A quick test in my local development environment shows a problem.   No commands now work.   Adding a logging line after the room value is set ( `console.log "room = #{room}"` ) shows the issue.   When using locally, the room is **Shell**, same as the user name.    I could put Shell in the list, but putting in the user name value rather than a fixed **Shell** will also allow Slack DM to work as Slack Direct Messages also have a room name equal to the user name.    Here is the improved middleware.
 
-```Coffeescript
+```javascript
   # Limit responses to the listed rooms, Shell and Slack DM
   robot.receiveMiddleware (context, next, done) ->
     room = context.response.message.room

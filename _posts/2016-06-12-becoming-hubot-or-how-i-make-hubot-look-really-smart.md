@@ -11,7 +11,7 @@ When my teammates talk to me about problems with Hubot I learn about what is and
 
 So I went to look for a way of seeing what mistakes they are making.  Since these mistakes are not matching a Hubot command there are no log entries for them.  So how can I see these?   My solution was to become Hubot.  Well maybe not actually, but to become enough of Hubot to see what users are doing when they are not getting the commands right.  A little digging I discovered someone had already thought about this and created the **robot.catchAll** command.   I set about to use this to take any commands that did not match and send them to me so I can see the mistakes.
 
-```coffeescript
+```javascript
   robot.catchAll (msg) ->
     hubotAdmin = process.env.HUBOT_ADMIN
     robot.messageRoom hubotAdmin, "#{msg.message.user.name}: #{msg.message.text}"
@@ -22,7 +22,7 @@ My testing of this in local hubot looked good, but I was a little suspicious so 
 
 Take two.  I need a filter on this command to only match if the hubot prefix is there. Thanks [wingrunr21](https://gist.github.com/wingrunr21) for [catchall.coffee](https://gist.github.com/wingrunr21/7118744) which showed me the way to do this.  Here is what I now have in place.
 
-```coffeescript
+```javascript
   robot.catchAll (msg) ->
     hubotAdmin = process.env.HUBOT_ADMIN
     regex = new RegExp "^(?:#{robot.alias}|#{robot.name}) (.*)", "i"
@@ -44,7 +44,7 @@ command you are trying to run.  Try removing those.
 
 That would give a much better end user experience and make Hubot sound really smart. So I created an **echouser** command only available to admins.  Since this is only for admins I have omitted help for this command so users do not see it.
 
-```coffeescript
+```javascript
 robot.respond /echouser ([\w-]+) (.*)$/i, (msg) ->
   if robot.auth.isAdmin(msg.envelope.user)
     room = msg.match[2]
@@ -55,6 +55,6 @@ robot.respond /echouser ([\w-]+) (.*)$/i, (msg) ->
 
 Now when a user makes mistakes in syntax I will see them and I can respond with a helpful suggestion ... and occasionally a snarky response as per Hubot best practices.
 
-```TEXT
+```
 All of your syntax mistakes are causing overload in my OCD algorithms.  The help command is there for a reason.  I suggest you use it.
 ```

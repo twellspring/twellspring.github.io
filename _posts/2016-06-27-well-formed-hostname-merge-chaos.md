@@ -11,8 +11,8 @@ The pillar merge used in the last post allowed us to have global data and enviro
 
 **pillar/parse_name.sls**
 
-```yaml
 {% raw %}
+```yaml
 {%- set name_parts = {} %}
 {%- set namesplit   = grains['id'].split('-') %}
 {%- set datacenter = namesplit[0] }
@@ -21,8 +21,8 @@ The pillar merge used in the last post allowed us to have global data and enviro
 include:
   - nameslugs/{{ nameslug }}
   - datacenter/{{ datacenter }}
-{% endraw %}
 ```
+{% endraw %}
 
 ###  Pillar Merge Strategy ###
 This small addition is not worth an entire blog post.  But it is the gateway introduce the need for a pillar merge strategy. The well formed hostname ( datacenter-function-environment-number ) makes it is possible to have data specific to the each name part and to the whole name:
