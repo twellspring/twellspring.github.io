@@ -2,8 +2,6 @@
 layout: page
 title: "Why"
 permalink: "/why/"
-header:
-    image_fullwidth: "header_drop.jpg"
 ---
 
 As a long time technology worker I know one of the fundamental truths: I don't know it all and I cant know it all.  And so I consume the internet.  I have read hundreds of blogs and googled thousands of subjects.   I do this to find answers to specific problems.  I do this to keep up with the technology world: to learn more about a piece of software, a development methodology, a DevOps best practice.  And for much of my time in technology I did this as a consumer only.  I listened to the conversation but I did not speak.
