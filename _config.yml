@@ -153,6 +153,7 @@ defaults:
       show_meta: True 	# Hide metadata for all pages
       sidebar: right
       comments: false
+      sharethis: false
       author: twells     # Default author for pages
   -
     scope:
@@ -162,6 +163,7 @@ defaults:
       show_meta: true   # Show metadata for all posts
       sidebar: right
       comments: true
+      sharethis: true
       author: twells     # Default author for posts
 
 

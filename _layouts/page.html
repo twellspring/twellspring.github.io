@@ -37,10 +37,10 @@ header:
 			<div itemprop="articleSection">
 			{{ content }}
 			</div>
-    	{% if page.comments == true %}
+    	{% if page.sharethis == true %}
       {% include _sharethis.html %}
       {% endif %}
-      
+
 			{% if page.show_meta == true %}
 			{% include _meta_information.html %}
 			{% endif %}
