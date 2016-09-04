@@ -5,7 +5,7 @@ meta_title: "Contact form"
 permalink: "/contact/"
 ---
 
-You can contact me via social media ... look for the social media icons in the footer of every page.
+You can contact me via social media ... look for the social media icons at the top left of this and every page.
 
 If you still want to send me an email, fill out the form below.
 
