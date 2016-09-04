@@ -1,17 +1,27 @@
 - name: GitHub
   url: http://github.com/twellspring
   class: icon-github
-  title: Todd on Github
-
-# - name: YouTube
-#   url: http://www.youtube.com/PhlowMedia
-#   class: icon-youtube
-#   title: "Videos, Video-Anleitungen und Filme von Phlow auf YouTube"
+  title: "Todd on Github"
 
 - name: Twitter
   url: http://twitter.com/todd_wells
   class: icon-twitter
   title: "Todd on Twitter"
+
+- name: LinkedIn
+  url: https://www.linkedin.com/in/todd-wells-600bb813
+  class: icon-linkedin
+  title: "Todd on LinkedIn"
+
+- name: rss
+  url: http://todd.wells.ws/feed
+  class: icon-rss
+  title: "Blog feed"
+
+# - name: YouTube
+#   url: http://www.youtube.com/PhlowMedia
+#   class: icon-youtube
+#   title: "Videos, Video-Anleitungen und Filme von Phlow auf YouTube"
 
 # - name: Mixcloud
 #   url: http://www.mixcloud.com/phlow/
