@@ -11,7 +11,7 @@
   title: "Jekyll, blog-aware static site generator"
 
 - name: "Hosted on github"
-  url: "https://github.com"
+  url: "https://pages.github.com/"
   class: "sitemap-link"
   title: "Hosted on github"
 
