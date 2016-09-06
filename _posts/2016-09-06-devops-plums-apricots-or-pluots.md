@@ -1,6 +1,6 @@
 ---
 layout: post
-title: DevOps: Plums and Apricots or Pluots. Can Ops use Dev Techniques?
+title: "DevOps, Plums and Apricots or Pluots. Can Ops use Dev Techniques?"
 teaser: "Is DevOps shoving plums and apricots into a bowl and pretending they are the same thing or is it breeding something new and giving it a new name like pluot?  When DevOps was coined in 2009, it was a label for a bottom up movement:  people in the IT trenches trying to figure out how to make things work better.  Agile programming had changed development and Ops was having trouble keeping up.  In the last 6 years the term has definitely gone corporate but retains its roots in the trenches.   So as a trench dweller I have to wrestle with the practicalities of DevOps every day.  Today I am wanting to see if the DevOps theory that Ops can use the same processes as Dev really works in practice."
 tags: devops, saltstack,
 header:
