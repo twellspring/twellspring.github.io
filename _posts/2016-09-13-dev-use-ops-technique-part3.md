@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Can Ops use Dev Techniques Part 3, Deployment Workflow"
-teaser: "The last piece of the development "process" I want to look at is the Development Workflow. What is the process for getting the code from the developer and onto a physical server where customers can use it. Generally speaking companies have a set of environments that  code will flow through before it gets into production.  Lets keep this simple with three environments"
+teaser: "The last piece of the development process I want to look at is the Development Workflow. What is the process for getting the code from the developer and onto a physical server where customers can use it. Generally speaking companies have a set of environments that  code will flow through before it gets into production.  Lets keep this simple with three environments"
 tags: devops, saltstack,
 header:
     image_fullwidth: "mountains.jpg"
