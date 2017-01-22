@@ -20,6 +20,7 @@ Are there no formulas because people can not make it work?  Or is it just that n
 And a couple of days later I have a formula that works.  Well, it works 95%.  I get an error when trying to use nat_gateway_subnet_name inside a boto_vpc.route_table_present.  So SaltStack issue created and I find a workaround until that error gets fixed.  Which means a 2 run solution.  First formula run creates all the pieces. Then copy the NAT Gateway ID into the pillar and re-run the formula to add the NAT Gateway as the default for internal subnet routing table rules.
 
 Two days invested in creating an aws-formula is much better than creating an inflexible CloudFormation Template. And the [aws-formula](https://github.com/saltstack-formulas/aws-formula) is now live on salt-stack-formulas. The sample pillar shows the creation of a three tier, three Availability Zone VPC.  It creates:
+
 * Key Pairs
 * VPC
 * Internet Gateway
