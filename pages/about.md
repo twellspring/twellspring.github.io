@@ -3,6 +3,8 @@ layout: page
 title: "About"
 meta_title: "About Todd Wells"
 permalink: "/about/"
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 I am a techie who likes hiking and backpacking as a hobby and to keep me grounded while working in the Cloud, hence my slogan.  I have a long term unrealized goal of automating and training myself out of a job.  My quest for unemployment started in my early career working hard to realize the perfection of the lazy sysadmin. I simultaneously attempted TKT ( Total Knowledge Transfer ) as a Linux/Open Source advocate and teacher to the technical and becoming-technical people around me. Scripts to simplify my job and training others to do that simpler job will surely lead my quickly to unemployment.

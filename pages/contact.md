@@ -3,6 +3,8 @@ layout: page
 title: "Contact"
 meta_title: "Contact form"
 permalink: "/contact/"
+header:
+    image_fullwidth: "mountains.jpg"
 ---
 
 You can contact me via social media ... look for the social media icons at the top left of this and every page.
