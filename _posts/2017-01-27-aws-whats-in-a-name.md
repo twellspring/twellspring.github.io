@@ -17,6 +17,7 @@ AWS uses a tag to capture the name for objects.  In VPCs, this includes: Subnets
 
 ![AWS routing tables in same VPC with the same name](/assets/img/aws-route-table-duplicate-name.png)
 
+
 The boto modules appear to get caught by this as well.  I have two VPCs in the same region.  Neither have the routing table named my_route_table.
 
 ![two vpc](/assets/img/aws-two-vpc.png)
