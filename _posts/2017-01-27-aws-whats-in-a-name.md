@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Can SaltStack do AWS, what's in a name"
-teaser: "Two days of aws-formuala being live and I found it was broken.  Because of names. More precisely the collision of of names in different VPCs.  Aren't VPCs completely independent?  Well yes, except for names it appears."
+teaser: "Two days of aws-formuala being live and I found it was broken.  Because of names. More precisely the collision of of names in different VPCs.  Aren't VPCs completely independent?  Well yes, except for names it appears. The normal methodology for a salt state is to check if something needs to be updated and then update it if it does.  It appears that this methodology is breaking down in the AWS state/module.  I think this is partly due to how AWS is structured and part to difficulties with the boto module."
 tags: devops, saltstack, aws
 header:
     image_fullwidth: "mountains.jpg"
@@ -9,19 +9,19 @@ header:
 
 Two days of [aws-formula](https://github.com/saltstack-formulas/aws-formula) being live and I found it was broken. Because of names. More precisely the collision of of names in different VPCs.  Aren't VPCs completely independent?  Well yes, except for names it appears.
 
-The normal methodology for a salt state is to check if something needs to be updated and then update it if it does.  It appears that this  methodology is breaking down in the AWS state/module.  I think this is partly due to how AWS is structured and part to difficulties with the boto module.
+The normal methodology for a salt state is to check if something needs to be updated and then update it if it does.  It appears that this methodology is breaking down in the AWS state/module.  I think this is partly due to how AWS is structured and part to difficulties with the boto module.
 
 The aws-formula uses object names to create all objects.  One reason for this is the lack of a mechanism for capturing the results of one state ( create Internet Gateway ) and using a part of that captured value ( Internet Gateway ID) as an input for another state ( create Route Table ).   Ansible's `Registered Variable` can accomplish this, but it is somewhat messy as the registered variable has to be manipulated in a command in order to parse out the part of the output desired, then that parsed out value captured in another variable before being used in subsequent commands.  Using Names instead of IDs for all AWS objects is a much cleaner methodology for creating a VPC and all its required components.  It removes all the complexity of parsing IDs based on state results.
 
 AWS uses a tag to capture the name for objects.  In VPCs, this includes: Subnets, Route Tables, Internet Gateways, Network ACLs, Security Groups.   Multiple objects of these types can have the same name. Here is an example:
 
-[AWS routing tables in same VPC with the same name](/assets/img/aws-route-table-duplicate-name.png)
+![AWS routing tables in same VPC with the same name](/assets/img/aws-route-table-duplicate-name.png)
 
 The boto modules appear to get caught by this as well.  I have two VPCs in the same region.  Neither have the routing table named my_route_table.
 
-[two vpc](/assets/img/aws-two-vpc.png)
+![two vpc](/assets/img/aws-two-vpc.png)
 
-[no my_route_table ](/assets/img/aws-no-route-table.png)
+![no my_route_table ](/assets/img/aws-no-route-table.png)
 
 But yet when I run the following states instead of getting both to succeed, only one succeeds.
 
