@@ -6,7 +6,7 @@
 #
 layout: frontpage
 header:
-  image_fullwidth: mountains.jp
+  image_fullwidth: "mountains.jpg"
 permalink: /index.html
 #
 # This is a nasty hack to make the navigation highlight
