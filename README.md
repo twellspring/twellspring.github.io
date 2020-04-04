@@ -1,3 +1,20 @@
+## Initial Setup ##
+- [Install Jekyll](https://jekyllrb.com/docs/installation/macos/)
+- add bin to path so that the `blog` command will work
+
+## Post ##
+- Clone a post, or do `blog post "some name"` 
+- Make sure frontmatter is like other posts. 
+- To preview use `blog build` and `blog serve` the go to localhost:4000
+- commit post and push to master
+
+
+
+# From Theme #
+
+
+
+
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Phlow&url=https://github.com/Phlow/feeling-responsive&title=Support%20Feeling%20Responsive%20Jekyll%20Theme&language=en_GB&tags=github,jekyll,theme,webdesign&category=software)
 
 
