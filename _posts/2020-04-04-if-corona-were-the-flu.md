@@ -1,7 +1,7 @@
 ---
 layout: page
 title: If Corona Were the Flu
-teaser: "Trying to understand the Corona virus and how it is affecting society is an exercise in frustration. Sifting through all of the news, blogs, tweets, gossip to get to accurate and useful data is hard. We are getting told "Social Distance", "Stay at Home", "Flatten The Curve".  But"
+teaser: 'Trying to understand the Corona virus and how it is affecting society is an exercise in frustration. Sifting through all of the news, blogs, tweets, gossip to get to accurate and useful data is hard. We are getting told "Social Distance", "Stay at Home", "Flatten The Curve".  But'
 tags: Covid19 Corona
 header:
     image_fullwidth: "mountains.jpg"
