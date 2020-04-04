@@ -2,15 +2,16 @@
 	<div class="panel radius">
 		<h3>About</h3>
 		<p>
-			I am a techie who likes hiking and backpacking as a hobby and to keep me grounded while working in the Cloud, hence my slogan.  I have a long term unrealized goal of automating and training myself out of a job.
-			 <br><a href="/about"><strong>{{ site.data.language.read_more }}</strong></a>
+			I am a techie who likes hiking and backpacking as a hobby and to keep me grounded while working in the
+			Cloud, hence my slogan. I have a long term unrealized goal of automating and training myself out of a job.
+			<br><a href="/about"><strong>{{ site.data.language.read_more }}</strong></a>
 		</p>
 	</div>
 
 	<div class="panel radius">
 		<h3>Recent Posts</h3>
 		<p>
-			{% include list-posts entries='4' offset='0' %}
+			{% include list-posts entries='5' offset='3' %}
 		</p>
 	</div>
 
@@ -18,8 +19,8 @@
 		<h3>Tags</h3>
 		<ul>
 			{% for tag in site.tags %}
-	    <li><a href="/blog/tags/#{{ tag[0] | slugify }}" class="post-tag">{{ tag[0] }}</a></li>
-	    {% endfor %}
+			<li><a href="/blog/tags/#{{ tag[0] | slugify }}" class="post-tag">{{ tag[0] }}</a></li>
+			{% endfor %}
 		</ul>
 	</div>
 
