@@ -15,15 +15,15 @@ So the first picture is "What if Corona were the flu".
 Lets start with [flu data from CDC](https://www.cdc.gov/flu/about/burden/preliminary-in-season-estimates.htm).  I have picked a number within the ranges specified, assuming the number is towards the top of the range.
 
 * 50,000,000 infections (15% of US population)
-* 600,000 hospitalizations (1.2%)
-* **60,000** deaths (.12%)
+* 600,000 hospitalizations (1.2% of infections)
+* **60,000** deaths (.12% of infections)
 
 ### COVID-19 Same Infection Rate as Flu, Low Mortality ###
 And now imagine we leave the infection rate the same but change the hospitalization and death rates to those of COVID-19.  Based on the [COVID-19 data from CDC](https://www.cdc.gov/mmwr/volumes/69/wr/mm6912e2.htm?s_cid=mm6912e2_w#T1_down) the hospitalization and death percentages are (using the lowest percentage in the range) 21% and 1.8% respectively.  I'm actually going to further lower the death rate to only 1% for now.   With that here is what COVID-19 would look like
 
 * 50,000,000 infections (15% of US population)
-* 10,500,000 hospitalizations (21%)
-* **500,000** deaths (1%)
+* 10,500,000 hospitalizations (21% of infections)
+* **500,000** deaths (1% of infections)
 
 ### COVID-19 Conservative Infection Rate, Low Mortality ###
 Based on the assumption that COVID-19 had the same infection rate as the flu, and that our medical system could handle the increased hospitalization rate, the US would lose half a million people. But those are not valid assumptions. 
@@ -31,15 +31,15 @@ Based on the assumption that COVID-19 had the same infection rate as the flu, an
 COVID-19 is much more contagious than flu.  After watching [Ninja Nerd Science](https://www.youtube.com/watch?v=PWzbArPgo-o) I am going with a conservative estimate of twice as contagious, doubling our infections. 
 
 * 100,000,000 infections (30% of US population)
-* 21,000,000 hospitalizations (21%)
-* **1,000,000** deaths (1%)
+* 21,000,000 hospitalizations (21% of infections)
+* **1,000,000** deaths (1% of infections)
 
 ### COVID-19 Conservative Infection Rate, Conservative Mortality for Overloaded Hospitals ###
 And our medical system can also not handle the patient load. And so the death rate will go up as people can not get the medical treatment they require. Lets also make a conservative change and put the death rate back to the 1.8% of the CDC data.
 
 * 100,000,000 infections (30% of US population)
-* 21,000,000 hospitalizations (21%)
-* **1,800,000** deaths (1.8%)
+* 21,000,000 hospitalizations (21% of infections)
+* **1,800,000** deaths (1.8% of infections)
 
 ### Comments ###
  Even the conservative picture of COVID-19 without any "extreme measures" is pretty grim. The actual picture if we did not try to reduce the infection rate and prevent hospitals from being completely overloaded would likely be much worse.
